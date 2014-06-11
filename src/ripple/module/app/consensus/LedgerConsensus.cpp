@@ -1524,6 +1524,9 @@ private:
 
     void updateOurPositions ()
     {
+        WriteLog (lsDEBUG, LedgerConsensus) << "updateOurPositions seq"
+            << mPreviousLedger->getLedgerSeq () + 1
+            << " mPeerPositions.size(): " << mPeerPositions.size ();
         boost::posix_time::ptime peerCutoff
             = boost::posix_time::second_clock::universal_time ();
         boost::posix_time::ptime ourCutoff
@@ -1554,6 +1557,12 @@ private:
             {
                 // proposal is still fresh
                 ++closeTimes[roundCloseTime (it->second->getCloseTime ())];
+                WriteLog (lsDEBUG, LedgerConsensus)
+                    << "updateOurPositions fresh proposal seq"
+                    << mPreviousLedger->getLedgerSeq () + 1
+                    << " mPeerPositions.size(): " << mPeerPositions.size ()
+                    << "added closeTimes " << roundCloseTime(it->second->getCloseTime ())
+                    << "," << closeTimes[roundCloseTime (it->second->getCloseTime ())];
                 ++it;
             }
         }
@@ -1617,6 +1626,12 @@ private:
             if (mProposing)
             {
                 ++closeTimes[roundCloseTime (mOurPosition->getCloseTime ())];
+                WriteLog (lsDEBUG, LedgerConsensus)
+                    << "updateOurPositions proposing seq"
+                    << mPreviousLedger->getLedgerSeq () + 1
+                    << " mPeerPositions.size(): " << mPeerPositions.size ()
+                    << "added closeTimes " << roundCloseTime(it->second->getCloseTime ())
+                    << "," << closeTimes[roundCloseTime (it->second->getCloseTime ())];
                 ++threshVote;
                 ++threshConsensus;
             }
