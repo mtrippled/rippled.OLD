@@ -17,6 +17,8 @@
 */
 //==============================================================================
 
+#include <ripple/nodestore/Database.h>
+
 namespace ripple {
 
 ConsensusTransSetSF::ConsensusTransSetSF (NodeCache& nodeCache)
@@ -41,7 +43,7 @@ void ConsensusTransSetSF::gotNode (bool fromFilter, const SHAMapNode& id, uint25
         {
             Serializer s (nodeData.begin () + 4, nodeData.end ()); // skip prefix
             SerializerIterator sit (s);
-            SerializedTransaction::pointer stx = std::make_shared<SerializedTransaction> (boost::ref (sit));
+            SerializedTransaction::pointer stx = std::make_shared<SerializedTransaction> (std::ref (sit));
             assert (stx->getTransactionID () == nodeHash);
             getApp().getJobQueue ().addJob (
                 jtTRANSACTION, "TXS->TXN",

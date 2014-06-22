@@ -166,7 +166,6 @@ private:
 
         if (1 == iParams)
         {
-            nothing ();
         }
         else if (2 == iParams)
         {
@@ -235,7 +234,6 @@ private:
 
         if (1 == iParams)
         {
-            nothing ();
         }
         else if (2 == iParams)
         {
@@ -814,6 +812,7 @@ public:
             {   "ledger_current",       &RPCParser::parseAsIs,                  0,  0   },
     //      {   "ledger_entry",         &RPCParser::parseLedgerEntry,          -1, -1   },
             {   "ledger_header",        &RPCParser::parseLedgerId,              1,  1   },
+            {   "ledger_request",       &RPCParser::parseLedgerId,              1,  1   },
             {   "log_level",            &RPCParser::parseLogLevel,              0,  2   },
             {   "logrotate",            &RPCParser::parseAsIs,                  0,  0   },
     //      {   "nickname_info",        &RPCParser::parseNicknameInfo,          1,  1   },

@@ -1,4 +1,3 @@
-
 //------------------------------------------------------------------------------
 /*
     This file is part of rippled: https://github.com/ripple/rippled
@@ -243,14 +242,14 @@ STPathSet Pathfinder::filterPaths(int iMaxPaths, STPath& extraPath)
     try
     {
         STAmount saMaxAmountAct, saDstAmountAct;
-        std::vector<PathState::pointer> vpsExpanded;
+        PathState::List pathStateList;
         LedgerEntrySet lesSandbox (mLedger, tapNONE);
 
-        TER result = rippleCalculate (
+        TER result = path::rippleCalculate (
                  lesSandbox,
                  saMaxAmountAct,
                  saDstAmountAct,
-                 vpsExpanded,
+                 pathStateList,
                  mSrcAmount,
                  mDstAmount,
                  mDstAccountID,
@@ -286,23 +285,23 @@ STPathSet Pathfinder::filterPaths(int iMaxPaths, STPath& extraPath)
     {
         STAmount    saMaxAmountAct;
         STAmount    saDstAmountAct;
-        std::vector<PathState::pointer> vpsExpanded;
+        PathState::List pathStateList;
         STPathSet   spsPaths;
         STPath&     spCurrent   = mCompletePaths[i];
 
         spsPaths.addPath (spCurrent);               // Just checking the current path.
 
-        TER         errorCode;
+        TER         resultCode;
 
         try
         {
             LedgerEntrySet lesSandbox (mLedger, tapNONE);
 
-            errorCode   = rippleCalculate (
+            resultCode   = path::rippleCalculate (
                               lesSandbox,
                               saMaxAmountAct,     // --> computed input
                               saDstAmountAct,     // --> computed output
-                              vpsExpanded,
+                              pathStateList,
                               mSrcAmount,         // --> amount to send max.
                               mDstAmount,         // --> amount to deliver.
                               mDstAccountID,
@@ -317,13 +316,13 @@ STPathSet Pathfinder::filterPaths(int iMaxPaths, STPath& extraPath)
         {
             WriteLog (lsINFO, Pathfinder) << "findPaths: Caught throw: " << e.what ();
 
-            errorCode   = tefEXCEPTION;
+            resultCode   = tefEXCEPTION;
         }
 
-        if (errorCode != tesSUCCESS)
+        if (resultCode != tesSUCCESS)
         {
             WriteLog (lsDEBUG, Pathfinder) <<
-                "findPaths: dropping: " << transToken (errorCode) <<
+                "findPaths: dropping: " << transToken (resultCode) <<
                 ": " << spCurrent.getJson (0);
         }
         else if (saDstAmountAct < saMinDstAmount)
@@ -406,7 +405,7 @@ boost::unordered_set<uint160> usAccountSourceCurrencies (
 
     // YYY Only bother if they are above reserve
     if (includeXRP)
-        usCurrencies.insert (uint160 (CURRENCY_XRP));
+        usCurrencies.insert (uint160 (XRP_CURRENCY));
 
     // List of ripple lines.
     AccountItems& rippleLines (lrCache->getRippleLines (raAccountID.getAccountID ()));
@@ -437,7 +436,7 @@ boost::unordered_set<uint160> usAccountDestCurrencies (
     boost::unordered_set<uint160>   usCurrencies;
 
     if (includeXRP)
-        usCurrencies.insert (uint160 (CURRENCY_XRP)); // Even if account doesn't exist
+        usCurrencies.insert (uint160 (XRP_CURRENCY)); // Even if account doesn't exist
 
     // List of ripple lines.
     AccountItems& rippleLines (lrCache->getRippleLines (raAccountID.getAccountID ()));
@@ -496,16 +495,20 @@ int Pathfinder::getPathsOut (RippleCurrency const& currencyID, const uint160& ac
         RippleState* rspEntry = (RippleState*) item.get ();
 
         if (currencyID != rspEntry->getLimit ().getCurrency ())
-            nothing ();
+        {
+        }
         else if (rspEntry->getBalance () <= zero &&
                  (!rspEntry->getLimitPeer ()
                   || -rspEntry->getBalance () >= rspEntry->getLimitPeer ()
                   ||  (bAuthRequired && !rspEntry->getAuth ())))
-            nothing ();
+        {
+        }
         else if (isDstCurrency && (dstAccount == rspEntry->getAccountIDPeer ()))
             count += 10000; // count a path to the destination extra
         else if (rspEntry->getNoRipplePeer ())
-            nothing (); // This probably isn't a useful path out
+        {
+            // This probably isn't a useful path out
+        }
         else
             ++count;
     }
@@ -594,9 +597,12 @@ STPathSet& Pathfinder::getPaths(PathType_t const& type, bool addComplete)
 
 bool Pathfinder::isNoRipple (const uint160& setByID, const uint160& setOnID, const uint160& currencyID)
 {
-    SLE::pointer sleRipple = mLedger->getSLEi (Ledger::getRippleStateIndex (setByID, setOnID, currencyID));
-    return sleRipple &&
-        is_bit_set (sleRipple->getFieldU32 (sfFlags), (setByID > setOnID) ? lsfHighNoRipple : lsfLowNoRipple);
+    SLE::pointer sleRipple = mLedger->getSLEi (
+        Ledger::getRippleStateIndex (setByID, setOnID, currencyID));
+
+    auto const flag ((setByID > setOnID) ? lsfHighNoRipple : lsfLowNoRipple);
+
+    return sleRipple && (sleRipple->getFieldU32 (sfFlags) & flag);
 }
 
 // Does this path end on an account-to-account link whose last account
@@ -609,7 +615,7 @@ bool Pathfinder::isNoRippleOut (const STPath& currentPath)
 
     // Last link must be an account
     STPathElement const& endElement = *(currentPath.end() - 1);
-    if (!is_bit_set(endElement.getNodeType(), STPathElement::typeAccount))
+    if (!(endElement.getNodeType() & STPathElement::typeAccount))
         return false;
 
     // What account are we leaving?
@@ -648,16 +654,16 @@ void Pathfinder::addLink(
             SLE::pointer sleEnd = mLedger->getSLEi(Ledger::getAccountRootIndex(uEndAccount));
             if (sleEnd)
             {
-                bool const bRequireAuth = is_bit_set(sleEnd->getFieldU32(sfFlags), lsfRequireAuth);
-                bool const bIsEndCurrency = (uEndCurrency == mDstAmount.getCurrency());
-                bool const bIsNoRippleOut = isNoRippleOut (currentPath);
+                bool const bRequireAuth (sleEnd->getFieldU32(sfFlags) & lsfRequireAuth);
+                bool const bIsEndCurrency (uEndCurrency == mDstAmount.getCurrency());
+                bool const bIsNoRippleOut (isNoRippleOut (currentPath));
 
                 AccountItems& rippleLines (mRLCache->getRippleLines(uEndAccount));
 
                 std::vector< std::pair<int, uint160> > candidates;
                 candidates.reserve(rippleLines.getItems().size());
 
-                BOOST_FOREACH(AccountItem::ref item, rippleLines.getItems())
+                for(auto item : rippleLines.getItems())
                 {
                     RippleState const& rspEntry = * reinterpret_cast<RippleState const *>(item.get());
                     uint160 const& acctID = rspEntry.getAccountIDPeer();
@@ -738,7 +744,10 @@ void Pathfinder::addLink(
         { // to XRP only
             if (!bOnXRP && getApp().getOrderBookDB().isBookToXRP(uEndIssuer, uEndCurrency))
             {
-                incompletePaths.assembleAdd(currentPath, STPathElement(STPathElement::typeCurrency, ACCOUNT_XRP, CURRENCY_XRP, ACCOUNT_XRP));
+                STPathElement pathElement(
+                    STPathElement::typeCurrency,
+                    XRP_ACCOUNT, XRP_CURRENCY, XRP_ACCOUNT);
+                incompletePaths.assembleAdd(currentPath, pathElement);
             }
         }
         else
@@ -749,9 +758,15 @@ void Pathfinder::addLink(
             WriteLog (lsTRACE, Pathfinder) << books.size() << " books found from this currency/issuer";
             BOOST_FOREACH(OrderBook::ref book, books)
             {
-                if (!currentPath.hasSeen (ACCOUNT_XRP, book->getCurrencyOut(), book->getIssuerOut()) &&
-                        !matchesOrigin(book->getCurrencyOut(), book->getIssuerOut()) &&
-                        (!bDestOnly || (book->getCurrencyOut() == mDstAmount.getCurrency())))
+                if (!currentPath.hasSeen (
+                        XRP_ACCOUNT,
+                        book->getCurrencyOut(),
+                        book->getIssuerOut()) &&
+                    !matchesOrigin(
+                        book->getCurrencyOut(),
+                        book->getIssuerOut()) &&
+                    (!bDestOnly ||
+                     (book->getCurrencyOut() == mDstAmount.getCurrency())))
                 {
                     STPath newPath(currentPath);
 
@@ -759,7 +774,9 @@ void Pathfinder::addLink(
                     { // to XRP
 
                         // add the order book itself
-                        newPath.addElement(STPathElement(STPathElement::typeCurrency, ACCOUNT_XRP, CURRENCY_XRP, ACCOUNT_XRP));
+                        newPath.addElement(STPathElement(
+                            STPathElement::typeCurrency,
+                            XRP_ACCOUNT, XRP_CURRENCY, XRP_ACCOUNT));
 
                         if (mDstAmount.getCurrency().isZero())
                         { // destination is XRP, add account and path is complete
@@ -773,7 +790,7 @@ void Pathfinder::addLink(
                     { // Don't want the book if we've already seen the issuer
                         // add the order book itself
                         newPath.addElement(STPathElement(STPathElement::typeCurrency | STPathElement::typeIssuer,
-                            ACCOUNT_XRP, book->getCurrencyOut(), book->getIssuerOut()));
+                            XRP_ACCOUNT, book->getCurrencyOut(), book->getIssuerOut()));
 
                         if ((book->getIssuerOut() == mDstAccountID) && book->getCurrencyOut() == mDstAmount.getCurrency())
                         { // with the destination account, this path is complete
@@ -913,7 +930,7 @@ void Pathfinder::initPathTable()
         list.push_back(CostedPath_t(4, makePath("safd")));              // source -> gateway -> book -> destination
         list.push_back(CostedPath_t(4, makePath("sfad")));
         list.push_back(CostedPath_t(5, makePath("saad")));
-        list.push_back(CostedPath_t(5, makePath("sxfd")));
+        list.push_back(CostedPath_t(5, makePath("sbfd")));
         list.push_back(CostedPath_t(6, makePath("sxfad")));
         list.push_back(CostedPath_t(6, makePath("safad")));
         list.push_back(CostedPath_t(6, makePath("saxfd")));             // source -> gateway -> book to XRP -> book -> destination
@@ -931,6 +948,7 @@ void Pathfinder::initPathTable()
         list.push_back(CostedPath_t(5, makePath("saxfd")));
         list.push_back(CostedPath_t(5, makePath("sxfad")));
         list.push_back(CostedPath_t(6, makePath("saxfad")));
+        list.push_back(CostedPath_t(6, makePath("sbfd")));
         list.push_back(CostedPath_t(7, makePath("saafd")));
         list.push_back(CostedPath_t(8, makePath("saafad")));
         list.push_back(CostedPath_t(9, makePath("safaad")));

@@ -17,8 +17,9 @@
 */
 //==============================================================================
 
+#include <ripple/basics/utility/IniFile.h>
+#include <ripple/basics/utility/Time.h>
 #include <beast/module/core/thread/DeadlineTimer.h>
-
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
 
@@ -810,7 +811,7 @@ private:
             {
                 if (db->getNull ("PublicKey"))
                 {
-                    nothing (); // We ignore entries we don't have public keys for.
+                    // We ignore entries we don't have public keys for.
                 }
                 else
                 {
@@ -1129,11 +1130,7 @@ private:
             && (mtpScoreNext.is_not_a_date_time ()                                          // Timer is not fine.
                 || mtpScoreNext < mtpFetchUpdated + boost::posix_time::seconds (SCORE_DELAY_SECONDS));
 
-        if (!bCanScore)
-        {
-            nothing ();
-        }
-        else if (bNow || bDirty)
+        if (bCanScore && (bNow || bDirty))
         {
             // Need to update or set timer.
             double const secondsFromNow = bNow ? 0 : SCORE_DELAY_SECONDS;

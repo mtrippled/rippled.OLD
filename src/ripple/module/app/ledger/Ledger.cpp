@@ -17,8 +17,9 @@
 */
 //==============================================================================
 
+#include <ripple/basics/utility/Time.h>
 #include <ripple/common/jsonrpc_fields.h>
-
+#include <ripple/nodestore/Database.h>
 #include <beast/unit_test/suite.h>
 
 namespace ripple {
@@ -469,12 +470,12 @@ SerializedTransaction::pointer Ledger::getSTransaction (SHAMapItem::ref item, SH
     SerializerIterator sit (item->peekSerializer ());
 
     if (type == SHAMapTreeNode::tnTRANSACTION_NM)
-        return std::make_shared<SerializedTransaction> (boost::ref (sit));
+        return std::make_shared<SerializedTransaction> (std::ref (sit));
     else if (type == SHAMapTreeNode::tnTRANSACTION_MD)
     {
         Serializer sTxn (sit.getVL ());
         SerializerIterator tSit (sTxn);
-        return std::make_shared<SerializedTransaction> (boost::ref (tSit));
+        return std::make_shared<SerializedTransaction> (std::ref (tSit));
     }
 
     return SerializedTransaction::pointer ();
@@ -488,7 +489,7 @@ SerializedTransaction::pointer Ledger::getSMTransaction (SHAMapItem::ref item, S
     if (type == SHAMapTreeNode::tnTRANSACTION_NM)
     {
         txMeta.reset ();
-        return std::make_shared<SerializedTransaction> (boost::ref (sit));
+        return std::make_shared<SerializedTransaction> (std::ref (sit));
     }
     else if (type == SHAMapTreeNode::tnTRANSACTION_MD)
     {
@@ -496,7 +497,7 @@ SerializedTransaction::pointer Ledger::getSMTransaction (SHAMapItem::ref item, S
         SerializerIterator tSit (sTxn);
 
         txMeta = std::make_shared<TransactionMetaSet> (item->getTag (), mLedgerSeq, sit.getVL ());
-        return std::make_shared<SerializedTransaction> (boost::ref (tSit));
+        return std::make_shared<SerializedTransaction> (std::ref (tSit));
     }
 
     txMeta.reset ();
@@ -1069,7 +1070,8 @@ Json::Value Ledger::getJson (int options)
 {
     Json::Value ledger (Json::objectValue);
 
-    bool bFull = is_bit_set (options, LEDGER_JSON_FULL);
+    bool const bFull (options & LEDGER_JSON_FULL);
+    bool const bExpand (options & LEDGER_JSON_EXPAND);
 
     ScopedLockType sl (mLock);
 
@@ -1105,7 +1107,7 @@ Json::Value Ledger::getJson (int options)
         ledger[jss::closed] = false;
     }
 
-    if (mTransactionMap && (bFull || is_bit_set (options, LEDGER_JSON_DUMP_TXRP)))
+    if (mTransactionMap && (bFull || options & LEDGER_JSON_DUMP_TXRP))
     {
         Json::Value& txns = (ledger[jss::transactions] = Json::arrayValue);
         SHAMapTreeNode::TNType type;
@@ -1113,7 +1115,7 @@ Json::Value Ledger::getJson (int options)
         for (SHAMapItem::pointer item = mTransactionMap->peekFirstItem (type); !!item;
                 item = mTransactionMap->peekNextItem (item->getTag (), type))
         {
-            if (bFull || is_bit_set (options, LEDGER_JSON_EXPAND))
+            if (bFull || bExpand)
             {
                 if (type == SHAMapTreeNode::tnTRANSACTION_NM)
                 {
@@ -1146,10 +1148,10 @@ Json::Value Ledger::getJson (int options)
 
     }
 
-    if (mAccountStateMap && (bFull || is_bit_set (options, LEDGER_JSON_DUMP_STATE)))
+    if (mAccountStateMap && (bFull || options & LEDGER_JSON_DUMP_STATE))
     {
         Json::Value& state = (ledger[jss::accountState] = Json::arrayValue);
-        if (bFull || is_bit_set (options, LEDGER_JSON_EXPAND))
+        if (bFull || bExpand)
             visitStateItems(std::bind(stateItemFullAppender, std::ref(state),
                                       std::placeholders::_1));
         else
@@ -1533,12 +1535,12 @@ uint256 Ledger::getQualityNext (uint256 const& uBase)
     return uResult;
 }
 
-uint256 Ledger::getAccountRootIndex (const uint160& uAccountID)
+uint256 Ledger::getAccountRootIndex (const uint160& account)
 {
     Serializer  s (22);
 
     s.add16 (spaceAccount); //  2
-    s.add160 (uAccountID);  // 20
+    s.add160 (account);  // 20
 
     return s.getSHA512Half ();
 }
@@ -1780,23 +1782,23 @@ uint256 Ledger::getNicknameIndex (uint256 const& uNickname)
     return s.getSHA512Half ();
 }
 
-uint256 Ledger::getOfferIndex (const uint160& uAccountID, std::uint32_t uSequence)
+uint256 Ledger::getOfferIndex (const uint160& account, std::uint32_t uSequence)
 {
     Serializer  s (26);
 
     s.add16 (spaceOffer);       //  2
-    s.add160 (uAccountID);      // 20
+    s.add160 (account);      // 20
     s.add32 (uSequence);        //  4
 
     return s.getSHA512Half ();
 }
 
-uint256 Ledger::getOwnerDirIndex (const uint160& uAccountID)
+uint256 Ledger::getOwnerDirIndex (const uint160& account)
 {
     Serializer  s (22);
 
     s.add16 (spaceOwnerDir);    //  2
-    s.add160 (uAccountID);      // 20
+    s.add160 (account);      // 20
 
     return s.getSHA512Half ();
 }

@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#include <ripple/module/overlay/api/Overlay.h>
+#include <ripple/overlay/Overlay.h>
 
 namespace ripple {
 
-Json::Value RPCHandler::doPeers (Json::Value, Resource::Charge& loadType, Application::ScopedLockType& masterLockHolder)
+Json::Value doPeers (RPC::Context& context)
 {
     Json::Value jvResult (Json::objectValue);
 

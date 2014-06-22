@@ -214,10 +214,7 @@ def config_base(env):
     except KeyError:
         pass
 
-    if Beast.system.linux:
-        env.ParseConfig('pkg-config --static --cflags --libs openssl')
-        env.ParseConfig('pkg-config --static --cflags --libs protobuf')
-    elif Beast.system.windows:
+    if Beast.system.windows:
         try:
             OPENSSL_ROOT = os.path.normpath(os.environ['OPENSSL_ROOT'])
             env.Append(CPPPATH=[
@@ -244,6 +241,11 @@ def config_env(toolchain, variant, env):
         env.Append(CPPDEFINES=['NDEBUG'])
 
     if toolchain in Split('clang gcc'):
+
+        if Beast.system.linux:
+            env.ParseConfig('pkg-config --static --cflags --libs openssl')
+            env.ParseConfig('pkg-config --static --cflags --libs protobuf')
+
         env.Append(CCFLAGS=[
             '-Wall',
             '-Wno-sign-compare',
@@ -322,7 +324,7 @@ def config_env(toolchain, variant, env):
         if toolchain == 'clang':
             if Beast.system.osx:
                 env.Replace(CC='clang', CXX='clang++', LINK='clang++')
-            else:
+            elif 'CLANG_CC' in env and 'CLANG_CXX' in env and 'CLANG_LINK' in env:
                 env.Replace(CC=env['CLANG_CC'], CXX=env['CLANG_CXX'], LINK=env['CLANG_LINK'])
             # C and C++
             # Add '-Wshorten-64-to-32'
@@ -332,7 +334,8 @@ def config_env(toolchain, variant, env):
             env.Append(CXXFLAGS=['-Wno-mismatched-tags'])
 
         elif toolchain == 'gcc':
-            env.Replace(CC=env['GNU_CC'], CXX=env['GNU_CXX'], LINK=env['GNU_LINK'])
+            if 'GNU_CC' in env and 'GNU_CXX' in env and 'GNU_LINK' in env:
+                env.Replace(CC=env['GNU_CC'], CXX=env['GNU_CXX'], LINK=env['GNU_LINK'])
             # Why is this only for gcc?!
             env.Append(CCFLAGS=['-Wno-unused-local-typedefs'])
 
@@ -359,9 +362,10 @@ def config_env(toolchain, variant, env):
             #'/Fd${TARGET}.pdb',     # Path: Program Database (.pdb)
             '/W3',                  # Warning level 3
             '/WX-',                 # Disable warnings as errors
-            '/wd"4018"',            # Disable warning C4018
-            '/wd"4244"',            # Disable warning C4244
-            '/wd"4267"',            # Disable warning 4267
+            '/wd"4018"',
+            '/wd"4244"',
+            '/wd"4267"',
+            '/wd"4800"',            # Disable C4800 (int to bool performance)
             ])
         env.Append(CPPDEFINES={
             '_WIN32_WINNT' : '0x6000',
@@ -396,7 +400,7 @@ def config_env(toolchain, variant, env):
             '/MACHINE:X64',
             '/MANIFEST',
             #'''/MANIFESTUAC:"level='asInvoker' uiAccess='false'"''',
-            #'/NOLOGO',
+            '/nologo',
             '/NXCOMPAT',
             '/SUBSYSTEM:CONSOLE',
             '/TLBID:1',
@@ -446,10 +450,6 @@ base.Append(CPPPATH=[
     os.path.join('src', 'beast'),
     os.path.join(build_dir, 'proto'),
     ])
-if Beast.system.windows:
-    base.Append(CPPPATH=[
-        os.path.join('src', 'protobuf', 'src'),
-        ])
 
 # Configure the toolchains, variants, default toolchain, and default target
 variants = ['debug', 'release']
@@ -488,7 +488,7 @@ for source in [
 # Declare the targets
 aliases = collections.defaultdict(list)
 msvc_configs = []
-for toolchain in toolchains:
+for toolchain in ['gcc', 'clang', 'msvc']:
     for variant in variants:
         # Configure this variant's construction environment
         env = base.Clone()
@@ -518,25 +518,26 @@ for toolchain in toolchains:
         objects.append(addSource('src/ripple/unity/beast.cpp', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/beastc.c', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/common.cpp', env, variant_dirs))
+        objects.append(addSource('src/ripple/unity/core.cpp', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/data.cpp', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/http.cpp', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/json.cpp', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/net.cpp', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/overlay.cpp', env, variant_dirs))
-        objects.append(addSource('src/ripple/unity/rpcx.cpp', env, variant_dirs))
-        objects.append(addSource('src/ripple/unity/websocket.cpp', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/peerfinder.cpp', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/protobuf.cpp', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/ripple.proto.cpp', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/radmap.cpp', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/resource.cpp', env, variant_dirs))
+        objects.append(addSource('src/ripple/unity/rpcx.cpp', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/sitefiles.cpp', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/sslutil.cpp', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/testoverlay.cpp', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/types.cpp', env, variant_dirs))
         objects.append(addSource('src/ripple/unity/validators.cpp', env, variant_dirs))
+        objects.append(addSource('src/ripple/unity/websocket.cpp', env, variant_dirs))
 
-        objects.append(addSource('src/ripple/unity/core.cpp', env, variant_dirs, [
+        objects.append(addSource('src/ripple/unity/nodestore.cpp', env, variant_dirs, [
             'src/leveldb/include',
             #'src/hyperleveldb/include', # hyper 
             'src/rocksdb/include',
@@ -567,7 +568,7 @@ for toolchain in toolchains:
             'src/snappy/config',
             ]))
 
-        if Beast.system.osx:
+        if toolchain == "clang" and Beast.system.osx:
             objects.append(addSource('src/ripple/unity/beastobjc.mm', env, variant_dirs))
 
         target = env.Program(
@@ -586,9 +587,10 @@ for toolchain in toolchains:
             msvc_configs.append(config)
         if toolchain in toolchains:
             aliases['all'].extend(target)
-        aliases[variant].extend(target)
-        aliases[toolchain].extend(target)
-        env.Alias(variant_name, target)
+            aliases[variant].extend(target)
+            aliases[toolchain].extend(target)
+            env.Alias(variant_name, target)
+
 for key, value in aliases.iteritems():
     env.Alias(key, value)
 

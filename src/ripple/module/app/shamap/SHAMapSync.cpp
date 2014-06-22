@@ -17,6 +17,7 @@
 */
 //==============================================================================
 
+#include <ripple/nodestore/Database.h>
 #include <beast/unit_test/suite.h>
 
 namespace ripple {
@@ -629,7 +630,7 @@ std::list<SHAMap::fetchPackEntry_t> SHAMap::getFetchPack (SHAMap* have, bool inc
 {
     std::list<fetchPackEntry_t> ret;
     getFetchPack (have, includeLeaves, max,
-                  std::bind (addFPtoList, boost::ref (ret),
+                  std::bind (addFPtoList, std::ref (ret),
                              std::placeholders::_1, std::placeholders::_2));
     return ret;
 }
@@ -664,7 +665,7 @@ void SHAMap::getFetchPack (SHAMap* have, bool includeLeaves, int max,
         {
             Serializer s;
             root->addRaw (s, snfPREFIX);
-            func (boost::cref(root->getNodeHash ()), boost::cref(s.peekData ()));
+            func (std::cref(root->getNodeHash ()), std::cref(s.peekData ()));
             --max;
         }
 
@@ -682,7 +683,7 @@ void SHAMap::getFetchPack (SHAMap* have, bool includeLeaves, int max,
         // 1) Add this node to the pack
         Serializer s;
         node->addRaw (s, snfPREFIX);
-        func (boost::cref(node->getNodeHash ()), boost::cref(s.peekData ()));
+        func (std::cref(node->getNodeHash ()), std::cref(s.peekData ()));
         --max;
 
         // 2) push non-matching child inner nodes
@@ -704,7 +705,7 @@ void SHAMap::getFetchPack (SHAMap* have, bool includeLeaves, int max,
                 {
                     Serializer s;
                     next->addRaw (s, snfPREFIX);
-                    func (boost::cref(childHash), boost::cref(s.peekData ()));
+                    func (std::cref(childHash), std::cref(s.peekData ()));
                     --max;
                 }
             }

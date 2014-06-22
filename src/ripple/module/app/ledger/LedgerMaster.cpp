@@ -17,6 +17,7 @@
 */
 //==============================================================================
 
+#include <ripple/basics/containers/RangeSet.h>
 #include <cassert>
 
 namespace ripple {
@@ -549,7 +550,7 @@ public:
             tmBH.set_ledgerhash (nextLedger->getHash().begin (), 32);
             Message::pointer packet = std::make_shared<Message> (tmBH, protocol::mtGET_OBJECTS);
 
-            target->sendPacket (packet, false);
+            target->send (packet);
             WriteLog (lsTRACE, LedgerMaster) << "Requested fetch pack for " << nextLedger->getLedgerSeq() - 1;
         }
         else
@@ -1075,7 +1076,6 @@ public:
 
                         if (!acq->isDone ())
                         {
-                            nothing ();
                         }
                         else if (acq->isComplete () && !acq->isFailed ())
                         {

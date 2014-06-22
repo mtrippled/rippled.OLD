@@ -17,9 +17,9 @@
 */
 //==============================================================================
 
-#include <ripple/module/overlay/api/predicates.h>
+#include <ripple/basics/utility/Time.h>
+#include <ripple/overlay/predicates.h>
 #include <ripple/common/jsonrpc_fields.h>
-
 #include <beast/module/core/thread/DeadlineTimer.h>
 #include <beast/module/core/system/SystemStats.h>
 #include <tuple>
@@ -757,7 +757,7 @@ void NetworkOPsImp::submitTransaction (Job&, SerializedTransaction::pointer iTra
     iTrans->add (s);
 
     SerializerIterator sit (s);
-    SerializedTransaction::pointer trans = std::make_shared<SerializedTransaction> (boost::ref (sit));
+    SerializedTransaction::pointer trans = std::make_shared<SerializedTransaction> (std::ref (sit));
 
     uint256 suppress = trans->getTransactionID ();
     int flags;
@@ -806,14 +806,15 @@ Transaction::pointer NetworkOPsImp::submitTransactionSync (Transaction::ref tpTr
     Serializer s;
     tpTrans->getSTransaction ()->add (s);
 
-    Transaction::pointer    tpTransNew  = Transaction::sharedTransaction (s.getData (), true);
+    Transaction::pointer tpTransNew = Transaction::sharedTransaction (s.getData (), true);
 
     if (!tpTransNew)
     {
         // Could not construct transaction.
-        nothing ();
+        return tpTransNew;
     }
-    else if (tpTransNew->getSTransaction ()->isEquivalent (*tpTrans->getSTransaction ()))
+
+    if (tpTransNew->getSTransaction ()->isEquivalent (*tpTrans->getSTransaction ()))
     {
         if (bSubmit)
             (void) NetworkOPsImp::processTransaction (tpTransNew, bAdmin, bLocal, bFailHard);
@@ -1431,7 +1432,7 @@ void NetworkOPsImp::switchLastClosedLedger (Ledger::pointer newLedger, bool duri
 
     clearNeedNetworkLedger ();
     newLedger->setClosed ();
-    Ledger::pointer openLedger = std::make_shared<Ledger> (false, boost::ref (*newLedger));
+    Ledger::pointer openLedger = std::make_shared<Ledger> (false, std::ref (*newLedger));
     m_ledgerMaster.switchLedgers (newLedger, openLedger);
 
     protocol::TMStatusChange s;
@@ -2660,17 +2661,11 @@ void NetworkOPsImp::unsubAccount (std::uint64_t uSeq,
 
     ScopedLockType sl (mLock);
 
-    BOOST_FOREACH (const RippleAddress & naAccountID, vnaAccountIDs)
+    for (auto const& naAccountID : vnaAccountIDs)
     {
-        SubInfoMapType::iterator    simIterator = subMap.find (naAccountID.getAccountID ());
+        auto simIterator = subMap.find (naAccountID.getAccountID ());
 
-
-        if (simIterator == subMap.end ())
-        {
-            // Not found.  Done.
-            nothing ();
-        }
-        else
+        if (simIterator != subMap.end ())
         {
             // Found
             simIterator->second.erase (uSeq);
@@ -2887,7 +2882,7 @@ void NetworkOPsImp::getBookPage (Ledger::pointer lpLedger, const uint160& uTaker
     bool            bDirectAdvance  = true;
 
     SLE::pointer    sleOfferDir;
-    uint256         uOfferIndex;
+    uint256         offerIndex;
     unsigned int    uBookEntry;
     STAmount        saDirRate;
 
@@ -2918,16 +2913,16 @@ void NetworkOPsImp::getBookPage (Ledger::pointer lpLedger, const uint160& uTaker
                 uTipIndex       = sleOfferDir->getIndex ();
                 saDirRate       = STAmount::setRate (Ledger::getQuality (uTipIndex));
 
-                lesActive.dirFirst (uTipIndex, sleOfferDir, uBookEntry, uOfferIndex);
+                lesActive.dirFirst (uTipIndex, sleOfferDir, uBookEntry, offerIndex);
 
                 m_journal.trace << "getBookPage:   uTipIndex=" << uTipIndex;
-                m_journal.trace << "getBookPage: uOfferIndex=" << uOfferIndex;
+                m_journal.trace << "getBookPage: offerIndex=" << offerIndex;
             }
         }
 
         if (!bDone)
         {
-            SLE::pointer    sleOffer        = lesActive.entryCache (ltOFFER, uOfferIndex);
+            SLE::pointer    sleOffer        = lesActive.entryCache (ltOFFER, offerIndex);
 
             if (sleOffer)
             {
@@ -3035,13 +3030,13 @@ void NetworkOPsImp::getBookPage (Ledger::pointer lpLedger, const uint160& uTaker
                 m_journal.warning << "Missing offer";
         }
 
-            if (!lesActive.dirNext (uTipIndex, sleOfferDir, uBookEntry, uOfferIndex))
+            if (!lesActive.dirNext (uTipIndex, sleOfferDir, uBookEntry, offerIndex))
             {
                 bDirectAdvance  = true;
             }
             else
             {
-                m_journal.trace << "getBookPage: uOfferIndex=" << uOfferIndex;
+                m_journal.trace << "getBookPage: offerIndex=" << offerIndex;
             }
         }
     }
@@ -3293,7 +3288,7 @@ void NetworkOPsImp::makeFetchPack (Job&, std::weak_ptr<Peer> wPeer,
 
         m_journal.info << "Built fetch pack with " << reply.objects ().size () << " nodes";
         Message::pointer msg = std::make_shared<Message> (reply, protocol::mtGET_OBJECTS);
-        peer->sendPacket (msg, false);
+        peer->send (msg);
     }
     catch (...)
     {

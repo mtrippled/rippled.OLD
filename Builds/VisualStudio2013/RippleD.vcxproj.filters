@@ -304,6 +304,24 @@
     <Filter Include="ripple\algorithm\api">
       <UniqueIdentifier>{D3D1BF8B-B98E-EA13-7D8C-F0C3243E99F5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ripple\basics">
+      <UniqueIdentifier>{B8720E2F-21B1-2847-F96C-4E00A45DC639}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ripple\basics\containers">
+      <UniqueIdentifier>{2F620E10-3275-8530-CE66-F28EDCDF96CD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ripple\basics\log">
+      <UniqueIdentifier>{993B768B-5F1D-066B-0C4E-B567A82ED0E5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ripple\basics\system">
+      <UniqueIdentifier>{290E79AD-FABB-AC30-3C05-3F6DE4827C28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ripple\basics\types">
+      <UniqueIdentifier>{E7D662E4-22C4-15C5-0AE6-C3AACA919EAC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ripple\basics\utility">
+      <UniqueIdentifier>{8C4A62F0-54D0-6DE8-292F-EB5C13E1AFBD}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ripple\common">
       <UniqueIdentifier>{386F7193-3E90-1C28-75BE-5AE6461046C7}</UniqueIdentifier>
     </Filter>
@@ -373,9 +391,6 @@
     <Filter Include="ripple\module\app\peers">
       <UniqueIdentifier>{08C8AFC4-AE5D-8717-F687-1E7D1900FCC2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ripple\module\app\rpc">
-      <UniqueIdentifier>{7C2C3FCE-2F25-2E20-1290-AC9FE4811E8B}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ripple\module\app\shamap">
       <UniqueIdentifier>{024841C2-163A-155B-A20F-51C5DB694C18}</UniqueIdentifier>
     </Filter>
@@ -388,44 +403,11 @@
     <Filter Include="ripple\module\app\websocket">
       <UniqueIdentifier>{611381EF-CB49-47DB-5552-F00357947B07}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ripple\module\basics">
-      <UniqueIdentifier>{14BC6FC5-AD61-C77A-38D2-64A4E0DD3388}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ripple\module\basics\containers">
-      <UniqueIdentifier>{F2C1F13E-B331-AF79-189B-5BEE793D7810}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ripple\module\basics\log">
-      <UniqueIdentifier>{BEE9B408-B0F4-C294-4D46-1489E5CB734E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ripple\module\basics\system">
-      <UniqueIdentifier>{5000F704-7AAD-07B5-6D3E-A6CDD897A6F4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ripple\module\basics\types">
-      <UniqueIdentifier>{5D510DC9-EB36-CE1B-F37D-95BC62BA87A3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ripple\module\basics\utility">
-      <UniqueIdentifier>{6735BBF1-7E71-05A6-D735-996F3CF2AE8C}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ripple\module\core">
       <UniqueIdentifier>{4DAFFAEC-2D9A-42C0-210F-483796C162E9}</UniqueIdentifier>
     </Filter>
     <Filter Include="ripple\module\core\functional">
       <UniqueIdentifier>{61C8064B-23D8-A490-1614-9D2BA78ADB68}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ripple\module\core\nodestore">
-      <UniqueIdentifier>{4AE7A273-D9A0-B02D-B176-CC21D166C84B}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ripple\module\core\nodestore\api">
-      <UniqueIdentifier>{AC237386-B045-74E2-4CDE-8DDA6A0A71B8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ripple\module\core\nodestore\backend">
-      <UniqueIdentifier>{0ED4B0B8-7611-3F48-E160-2A56D338F097}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ripple\module\core\nodestore\impl">
-      <UniqueIdentifier>{88114987-28FC-EE27-4F1D-8759061A3F77}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ripple\module\core\nodestore\tests">
-      <UniqueIdentifier>{7BE989C9-84A9-AF45-2261-A1A45D2AF3FA}</UniqueIdentifier>
     </Filter>
     <Filter Include="ripple\module\data">
       <UniqueIdentifier>{FB5092D7-3AA5-4E7F-F783-C8A929D8B588}</UniqueIdentifier>
@@ -451,20 +433,8 @@
     <Filter Include="ripple\module\net\rpc">
       <UniqueIdentifier>{643F2F19-8319-49F7-7DF1-4BF4F52BF4BF}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ripple\module\overlay">
-      <UniqueIdentifier>{AE687926-F53E-728F-2D48-A1DEC283E86E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ripple\module\overlay\api">
-      <UniqueIdentifier>{909364A1-443C-393A-3505-D36E048D7181}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ripple\module\overlay\impl">
-      <UniqueIdentifier>{C04BC25B-9F43-7B79-91FE-6C62B0E206EE}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ripple\module\rpc">
       <UniqueIdentifier>{4DB18141-EDCD-D13F-A8D3-407F5EF72217}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ripple\module\rpc\api">
-      <UniqueIdentifier>{4FED3B95-6B6D-46D5-D2B8-A1ECC581D5AC}</UniqueIdentifier>
     </Filter>
     <Filter Include="ripple\module\rpc\handlers">
       <UniqueIdentifier>{9AF7847B-DAB4-9AAA-9CCD-0162235C1FEC}</UniqueIdentifier>
@@ -477,6 +447,24 @@
     </Filter>
     <Filter Include="ripple\module\websocket\autosocket">
       <UniqueIdentifier>{587F434F-850E-8776-A958-745B41B9C407}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ripple\nodestore">
+      <UniqueIdentifier>{D3E78215-1C49-D4FB-E9FC-5074083D184F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ripple\nodestore\backend">
+      <UniqueIdentifier>{B79A9145-D4DD-8A3C-59ED-AF8BEE7AD7A3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ripple\nodestore\impl">
+      <UniqueIdentifier>{9D691DE1-17A1-5989-3E2E-F69B3E43152F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ripple\nodestore\tests">
+      <UniqueIdentifier>{3FDC73B9-A9C7-3533-FD40-E4032B9FA9FB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ripple\overlay">
+      <UniqueIdentifier>{51E817F6-DC2E-045A-9009-37E3D16D0990}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ripple\overlay\impl">
+      <UniqueIdentifier>{07E4BC73-2B68-D0D1-D922-FEBBB573F503}</UniqueIdentifier>
     </Filter>
     <Filter Include="ripple\peerfinder">
       <UniqueIdentifier>{186385AD-A056-FA3A-7E0E-759EB55E9EAB}</UniqueIdentifier>
@@ -1488,24 +1476,6 @@
     <ClInclude Include="..\..\src\beast\beast\module\core\streams\OutputStream.h">
       <Filter>beast\module\core\streams</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\beast\beast\module\core\system\BeforeBoost.h">
-      <Filter>beast\module\core\system</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\beast\beast\module\core\system\BoostIncludes.h">
-      <Filter>beast\module\core\system</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\beast\beast\module\core\system\BoostPlaceholdersFix.cpp">
-      <Filter>beast\module\core\system</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\beast\beast\module\core\system\BoostPlaceholdersFix.h">
-      <Filter>beast\module\core\system</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\beast\beast\module\core\system\Functional.h">
-      <Filter>beast\module\core\system</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\beast\beast\module\core\system\FunctionalIncludes.h">
-      <Filter>beast\module\core\system</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\beast\beast\module\core\system\StandardIncludes.h">
       <Filter>beast\module\core\system</Filter>
     </ClInclude>
@@ -1719,12 +1689,6 @@
     <ClCompile Include="..\..\src\beast\beast\net\tests\IPEndpoint.test.cpp">
       <Filter>beast\net\tests</Filter>
     </ClCompile>
-    <ClInclude Include="..\..\src\beast\beast\smart_ptr\ContainerDeletePolicy.h">
-      <Filter>beast\smart_ptr</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\beast\beast\smart_ptr\ScopedPointer.h">
-      <Filter>beast\smart_ptr</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\beast\beast\smart_ptr\SharedObject.h">
       <Filter>beast\smart_ptr</Filter>
     </ClInclude>
@@ -2748,6 +2712,108 @@
     <ClInclude Include="..\..\src\ripple\algorithm\api\DecayingSample.h">
       <Filter>ripple\algorithm\api</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\src\ripple\basics\containers\RangeSet.cpp">
+      <Filter>ripple\basics\containers</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\basics\containers\RangeSet.h">
+      <Filter>ripple\basics\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\basics\containers\SyncUnorderedMap.h">
+      <Filter>ripple\basics\containers</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\basics\log\Log.cpp">
+      <Filter>ripple\basics\log</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\basics\log\Log.h">
+      <Filter>ripple\basics\log</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\basics\log\LogFile.cpp">
+      <Filter>ripple\basics\log</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\basics\log\LogFile.h">
+      <Filter>ripple\basics\log</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\basics\log\LogPartition.cpp">
+      <Filter>ripple\basics\log</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\basics\log\LogPartition.h">
+      <Filter>ripple\basics\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\basics\log\LogSeverity.h">
+      <Filter>ripple\basics\log</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\basics\log\LogSink.cpp">
+      <Filter>ripple\basics\log</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\basics\log\LogSink.h">
+      <Filter>ripple\basics\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\basics\log\LoggedTimings.h">
+      <Filter>ripple\basics\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\basics\system\BoostIncludes.h">
+      <Filter>ripple\basics\system</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\basics\system\CheckLibraryVersions.cpp">
+      <Filter>ripple\basics\system</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\basics\system\CheckLibraryVersions.h">
+      <Filter>ripple\basics\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\basics\types\BasicTypes.h">
+      <Filter>ripple\basics\types</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\basics\utility\CountedObject.cpp">
+      <Filter>ripple\basics\utility</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\basics\utility\CountedObject.h">
+      <Filter>ripple\basics\utility</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\basics\utility\IniFile.cpp">
+      <Filter>ripple\basics\utility</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\basics\utility\IniFile.h">
+      <Filter>ripple\basics\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\basics\utility\PlatformMacros.h">
+      <Filter>ripple\basics\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\basics\utility\StringConcat.h">
+      <Filter>ripple\basics\utility</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\basics\utility\StringUtilities.cpp">
+      <Filter>ripple\basics\utility</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\basics\utility\StringUtilities.h">
+      <Filter>ripple\basics\utility</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\basics\utility\Sustain.cpp">
+      <Filter>ripple\basics\utility</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\basics\utility\Sustain.h">
+      <Filter>ripple\basics\utility</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\basics\utility\ThreadName.cpp">
+      <Filter>ripple\basics\utility</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\basics\utility\ThreadName.h">
+      <Filter>ripple\basics\utility</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\basics\utility\Time.cpp">
+      <Filter>ripple\basics\utility</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\basics\utility\Time.h">
+      <Filter>ripple\basics\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\basics\utility\ToString.h">
+      <Filter>ripple\basics\utility</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\basics\utility\UptimeTimer.cpp">
+      <Filter>ripple\basics\utility</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\basics\utility\UptimeTimer.h">
+      <Filter>ripple\basics\utility</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\ripple\common\KeyCache.h">
       <Filter>ripple\common</Filter>
     </ClInclude>
@@ -2920,6 +2986,9 @@
       <Filter>ripple\module\app\book\impl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ripple\module\app\book\impl\Taker.cpp">
+      <Filter>ripple\module\app\book\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\module\app\book\impl\Types.cpp">
       <Filter>ripple\module\app\book\impl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ripple\module\app\book\tests\OfferStream.test.cpp">
@@ -3249,15 +3318,6 @@
     <ClInclude Include="..\..\src\ripple\module\app\node\SqliteFactory.h">
       <Filter>ripple\module\app\node</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\app\paths\CalcNode.cpp">
-      <Filter>ripple\module\app\paths</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ripple\module\app\paths\CalcNodeAccountFwd.cpp">
-      <Filter>ripple\module\app\paths</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ripple\module\app\paths\CalcNodeAccountRev.cpp">
-      <Filter>ripple\module\app\paths</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\ripple\module\app\paths\CalcNodeAdvance.cpp">
       <Filter>ripple\module\app\paths</Filter>
     </ClCompile>
@@ -3267,16 +3327,31 @@
     <ClCompile Include="..\..\src\ripple\module\app\paths\CalcNodeDeliverRev.cpp">
       <Filter>ripple\module\app\paths</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ripple\module\app\paths\CalcNodeOffer.cpp">
-      <Filter>ripple\module\app\paths</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ripple\module\app\paths\CalcNodeRipple.cpp">
-      <Filter>ripple\module\app\paths</Filter>
-    </ClCompile>
     <ClInclude Include="..\..\src\ripple\module\app\paths\CalcState.h">
       <Filter>ripple\module\app\paths</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ripple\module\app\paths\Calculators.h">
+      <Filter>ripple\module\app\paths</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\module\app\paths\ComputeAccountLiquidityForward.cpp">
+      <Filter>ripple\module\app\paths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\module\app\paths\ComputeAccountLiquidityReverse.cpp">
+      <Filter>ripple\module\app\paths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\module\app\paths\ComputeLiquidity.cpp">
+      <Filter>ripple\module\app\paths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\module\app\paths\ComputeOfferLiquidity.cpp">
+      <Filter>ripple\module\app\paths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\module\app\paths\ComputeRippleLiquidity.cpp">
+      <Filter>ripple\module\app\paths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\module\app\paths\Node.cpp">
+      <Filter>ripple\module\app\paths</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\module\app\paths\Node.h">
       <Filter>ripple\module\app\paths</Filter>
     </ClInclude>
     <ClCompile Include="..\..\src\ripple\module\app\paths\PathNext.cpp">
@@ -3306,6 +3381,9 @@
     <ClInclude Include="..\..\src\ripple\module\app\paths\Pathfinder.h">
       <Filter>ripple\module\app\paths</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ripple\module\app\paths\QualityConstraint.h">
+      <Filter>ripple\module\app\paths</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\src\ripple\module\app\paths\RippleCalc.cpp">
       <Filter>ripple\module\app\paths</Filter>
     </ClCompile>
@@ -3327,6 +3405,12 @@
     <ClInclude Include="..\..\src\ripple\module\app\paths\Tuning.h">
       <Filter>ripple\module\app\paths</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\src\ripple\module\app\paths\Types.cpp">
+      <Filter>ripple\module\app\paths</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\module\app\paths\Types.h">
+      <Filter>ripple\module\app\paths</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\ripple\module\app\peers\ClusterNodeStatus.h">
       <Filter>ripple\module\app\peers</Filter>
     </ClInclude>
@@ -3341,18 +3425,6 @@
     </ClCompile>
     <ClInclude Include="..\..\src\ripple\module\app\peers\UniqueNodeList.h">
       <Filter>ripple\module\app\peers</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\app\rpc\RPCHandler.cpp">
-      <Filter>ripple\module\app\rpc</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\app\rpc\RPCHandler.h">
-      <Filter>ripple\module\app\rpc</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\app\rpc\RPCServerHandler.cpp">
-      <Filter>ripple\module\app\rpc</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\app\rpc\RPCServerHandler.h">
-      <Filter>ripple\module\app\rpc</Filter>
     </ClInclude>
     <ClCompile Include="..\..\src\ripple\module\app\shamap\FetchPackTests.cpp">
       <Filter>ripple\module\app\shamap</Filter>
@@ -3552,102 +3624,6 @@
     <ClInclude Include="..\..\src\ripple\module\app\websocket\WSServerHandler.h">
       <Filter>ripple\module\app\websocket</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\basics\containers\RangeSet.cpp">
-      <Filter>ripple\module\basics\containers</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\basics\containers\RangeSet.h">
-      <Filter>ripple\module\basics\containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\basics\containers\SyncUnorderedMap.h">
-      <Filter>ripple\module\basics\containers</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\basics\log\Log.cpp">
-      <Filter>ripple\module\basics\log</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\basics\log\Log.h">
-      <Filter>ripple\module\basics\log</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\basics\log\LogFile.cpp">
-      <Filter>ripple\module\basics\log</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\basics\log\LogFile.h">
-      <Filter>ripple\module\basics\log</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\basics\log\LogPartition.cpp">
-      <Filter>ripple\module\basics\log</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\basics\log\LogPartition.h">
-      <Filter>ripple\module\basics\log</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\basics\log\LogSeverity.h">
-      <Filter>ripple\module\basics\log</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\basics\log\LogSink.cpp">
-      <Filter>ripple\module\basics\log</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\basics\log\LogSink.h">
-      <Filter>ripple\module\basics\log</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\basics\log\LoggedTimings.h">
-      <Filter>ripple\module\basics\log</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\basics\system\BoostIncludes.h">
-      <Filter>ripple\module\basics\system</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\basics\system\CheckLibraryVersions.cpp">
-      <Filter>ripple\module\basics\system</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\basics\system\CheckLibraryVersions.h">
-      <Filter>ripple\module\basics\system</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\basics\types\BasicTypes.h">
-      <Filter>ripple\module\basics\types</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\basics\utility\CountedObject.cpp">
-      <Filter>ripple\module\basics\utility</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\basics\utility\CountedObject.h">
-      <Filter>ripple\module\basics\utility</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\basics\utility\IniFile.cpp">
-      <Filter>ripple\module\basics\utility</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\basics\utility\IniFile.h">
-      <Filter>ripple\module\basics\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\basics\utility\PlatformMacros.h">
-      <Filter>ripple\module\basics\utility</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\basics\utility\StringUtilities.cpp">
-      <Filter>ripple\module\basics\utility</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\basics\utility\StringUtilities.h">
-      <Filter>ripple\module\basics\utility</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\basics\utility\Sustain.cpp">
-      <Filter>ripple\module\basics\utility</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\basics\utility\Sustain.h">
-      <Filter>ripple\module\basics\utility</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\basics\utility\ThreadName.cpp">
-      <Filter>ripple\module\basics\utility</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\basics\utility\ThreadName.h">
-      <Filter>ripple\module\basics\utility</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\basics\utility\Time.cpp">
-      <Filter>ripple\module\basics\utility</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\basics\utility\Time.h">
-      <Filter>ripple\module\basics\utility</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\basics\utility\UptimeTimer.cpp">
-      <Filter>ripple\module\basics\utility</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\basics\utility\UptimeTimer.h">
-      <Filter>ripple\module\basics\utility</Filter>
-    </ClInclude>
     <ClCompile Include="..\..\src\ripple\module\core\functional\Config.cpp">
       <Filter>ripple\module\core\functional</Filter>
     </ClCompile>
@@ -3699,135 +3675,6 @@
     <ClInclude Include="..\..\src\ripple\module\core\functional\LoadMonitor.h">
       <Filter>ripple\module\core\functional</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\NodeStore.cpp">
-      <Filter>ripple\module\core\nodestore</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\NodeStore.h">
-      <Filter>ripple\module\core\nodestore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\api\Backend.h">
-      <Filter>ripple\module\core\nodestore\api</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\api\Database.h">
-      <Filter>ripple\module\core\nodestore\api</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\api\DummyScheduler.h">
-      <Filter>ripple\module\core\nodestore\api</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\api\Factory.h">
-      <Filter>ripple\module\core\nodestore\api</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\api\Manager.h">
-      <Filter>ripple\module\core\nodestore\api</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\api\NodeObject.h">
-      <Filter>ripple\module\core\nodestore\api</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\api\Scheduler.h">
-      <Filter>ripple\module\core\nodestore\api</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\api\Task.h">
-      <Filter>ripple\module\core\nodestore\api</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\api\Types.h">
-      <Filter>ripple\module\core\nodestore\api</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\api\VisitCallback.h">
-      <Filter>ripple\module\core\nodestore\api</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\backend\HyperDBFactory.cpp">
-      <Filter>ripple\module\core\nodestore\backend</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\backend\HyperDBFactory.h">
-      <Filter>ripple\module\core\nodestore\backend</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\backend\LevelDBFactory.cpp">
-      <Filter>ripple\module\core\nodestore\backend</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\backend\LevelDBFactory.h">
-      <Filter>ripple\module\core\nodestore\backend</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\backend\MemoryFactory.cpp">
-      <Filter>ripple\module\core\nodestore\backend</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\backend\MemoryFactory.h">
-      <Filter>ripple\module\core\nodestore\backend</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\backend\NullFactory.cpp">
-      <Filter>ripple\module\core\nodestore\backend</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\backend\NullFactory.h">
-      <Filter>ripple\module\core\nodestore\backend</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\backend\RocksDBFactory.cpp">
-      <Filter>ripple\module\core\nodestore\backend</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\backend\RocksDBFactory.h">
-      <Filter>ripple\module\core\nodestore\backend</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\impl\Backend.cpp">
-      <Filter>ripple\module\core\nodestore\impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\impl\BatchWriter.cpp">
-      <Filter>ripple\module\core\nodestore\impl</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\impl\BatchWriter.h">
-      <Filter>ripple\module\core\nodestore\impl</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\impl\Database.cpp">
-      <Filter>ripple\module\core\nodestore\impl</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\impl\DatabaseImp.h">
-      <Filter>ripple\module\core\nodestore\impl</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\impl\DecodedBlob.cpp">
-      <Filter>ripple\module\core\nodestore\impl</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\impl\DecodedBlob.h">
-      <Filter>ripple\module\core\nodestore\impl</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\impl\DummyScheduler.cpp">
-      <Filter>ripple\module\core\nodestore\impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\impl\EncodedBlob.cpp">
-      <Filter>ripple\module\core\nodestore\impl</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\impl\EncodedBlob.h">
-      <Filter>ripple\module\core\nodestore\impl</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\impl\Factory.cpp">
-      <Filter>ripple\module\core\nodestore\impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\impl\Manager.cpp">
-      <Filter>ripple\module\core\nodestore\impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\impl\NodeObject.cpp">
-      <Filter>ripple\module\core\nodestore\impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\impl\Scheduler.cpp">
-      <Filter>ripple\module\core\nodestore\impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\impl\Task.cpp">
-      <Filter>ripple\module\core\nodestore\impl</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\impl\Tuning.h">
-      <Filter>ripple\module\core\nodestore\impl</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\tests\BackendTests.cpp">
-      <Filter>ripple\module\core\nodestore\tests</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\tests\BasicTests.cpp">
-      <Filter>ripple\module\core\nodestore\tests</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\tests\DatabaseTests.cpp">
-      <Filter>ripple\module\core\nodestore\tests</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\core\nodestore\tests\TestBase.h">
-      <Filter>ripple\module\core\nodestore\tests</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\core\nodestore\tests\TimingTests.cpp">
-      <Filter>ripple\module\core\nodestore\tests</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\ripple\module\data\crypto\Base58Data.cpp">
       <Filter>ripple\module\data\crypto</Filter>
     </ClCompile>
@@ -4008,50 +3855,23 @@
     <ClInclude Include="..\..\src\ripple\module\net\rpc\RPCUtil.h">
       <Filter>ripple\module\net\rpc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\overlay\api\Message.h">
-      <Filter>ripple\module\overlay\api</Filter>
+    <ClInclude Include="..\..\src\ripple\module\rpc\ErrorCodes.h">
+      <Filter>ripple\module\rpc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\overlay\api\Overlay.h">
-      <Filter>ripple\module\overlay\api</Filter>
+    <ClInclude Include="..\..\src\ripple\module\rpc\Manager.h">
+      <Filter>ripple\module\rpc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\overlay\api\Peer.h">
-      <Filter>ripple\module\overlay\api</Filter>
+    <ClInclude Include="..\..\src\ripple\module\rpc\RPCHandler.h">
+      <Filter>ripple\module\rpc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\overlay\api\make_Overlay.h">
-      <Filter>ripple\module\overlay\api</Filter>
+    <ClInclude Include="..\..\src\ripple\module\rpc\RPCServerHandler.h">
+      <Filter>ripple\module\rpc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\overlay\api\predicates.h">
-      <Filter>ripple\module\overlay\api</Filter>
+    <ClInclude Include="..\..\src\ripple\module\rpc\Request.h">
+      <Filter>ripple\module\rpc</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\overlay\impl\Message.cpp">
-      <Filter>ripple\module\overlay\impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ripple\module\overlay\impl\OverlayImpl.cpp">
-      <Filter>ripple\module\overlay\impl</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\overlay\impl\OverlayImpl.h">
-      <Filter>ripple\module\overlay\impl</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\overlay\impl\PeerDoor.cpp">
-      <Filter>ripple\module\overlay\impl</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\src\ripple\module\overlay\impl\PeerDoor.h">
-      <Filter>ripple\module\overlay\impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\overlay\impl\PeerImp.h">
-      <Filter>ripple\module\overlay\impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\rpc\api\ErrorCodes.h">
-      <Filter>ripple\module\rpc\api</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\rpc\api\Manager.h">
-      <Filter>ripple\module\rpc\api</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\rpc\api\Request.h">
-      <Filter>ripple\module\rpc\api</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ripple\module\rpc\api\Tuning.h">
-      <Filter>ripple\module\rpc\api</Filter>
+    <ClInclude Include="..\..\src\ripple\module\rpc\Tuning.h">
+      <Filter>ripple\module\rpc</Filter>
     </ClInclude>
     <ClCompile Include="..\..\src\ripple\module\rpc\handlers\AccountCurrencies.cpp">
       <Filter>ripple\module\rpc\handlers</Filter>
@@ -4095,6 +3915,9 @@
     <ClCompile Include="..\..\src\ripple\module\rpc\handlers\GetCounts.cpp">
       <Filter>ripple\module\rpc\handlers</Filter>
     </ClCompile>
+    <ClInclude Include="..\..\src\ripple\module\rpc\handlers\Handlers.h">
+      <Filter>ripple\module\rpc\handlers</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\src\ripple\module\rpc\handlers\Ledger.cpp">
       <Filter>ripple\module\rpc\handlers</Filter>
     </ClCompile>
@@ -4117,6 +3940,9 @@
       <Filter>ripple\module\rpc\handlers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ripple\module\rpc\handlers\LedgerHeader.cpp">
+      <Filter>ripple\module\rpc\handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\module\rpc\handlers\LedgerRequest.cpp">
       <Filter>ripple\module\rpc\handlers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ripple\module\rpc\handlers\LogLevel.cpp">
@@ -4248,6 +4074,9 @@
     <ClInclude Include="..\..\src\ripple\module\rpc\impl\Authorize.h">
       <Filter>ripple\module\rpc\impl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ripple\module\rpc\impl\Context.h">
+      <Filter>ripple\module\rpc\impl</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\ripple\module\rpc\impl\DoPrint.h">
       <Filter>ripple\module\rpc\impl</Filter>
     </ClInclude>
@@ -4260,9 +4089,12 @@
     <ClInclude Include="..\..\src\ripple\module\rpc\impl\GetMasterGenerator.h">
       <Filter>ripple\module\rpc\impl</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\src\ripple\module\rpc\impl\Handlers.cpp">
+    <ClCompile Include="..\..\src\ripple\module\rpc\impl\Handler.cpp">
       <Filter>ripple\module\rpc\impl</Filter>
     </ClCompile>
+    <ClInclude Include="..\..\src\ripple\module\rpc\impl\Handler.h">
+      <Filter>ripple\module\rpc\impl</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\src\ripple\module\rpc\impl\LegacyPathFind.cpp">
       <Filter>ripple\module\rpc\impl</Filter>
     </ClCompile>
@@ -4284,6 +4116,12 @@
     <ClInclude Include="..\..\src\ripple\module\rpc\impl\ParseAccountIds.h">
       <Filter>ripple\module\rpc\impl</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\src\ripple\module\rpc\impl\RPCHandler.cpp">
+      <Filter>ripple\module\rpc\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\module\rpc\impl\RPCServerHandler.cpp">
+      <Filter>ripple\module\rpc\impl</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\ripple\module\rpc\impl\TransactionSign.cpp">
       <Filter>ripple\module\rpc\impl</Filter>
     </ClCompile>
@@ -4299,6 +4137,183 @@
     <ClCompile Include="..\..\src\ripple\module\websocket\autosocket\LogWebsockets.cpp">
       <Filter>ripple\module\websocket\autosocket</Filter>
     </ClCompile>
+    <ClInclude Include="..\..\src\ripple\nodestore\Backend.h">
+      <Filter>ripple\nodestore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\nodestore\Database.h">
+      <Filter>ripple\nodestore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\nodestore\DummyScheduler.h">
+      <Filter>ripple\nodestore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\nodestore\Factory.h">
+      <Filter>ripple\nodestore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\nodestore\Manager.h">
+      <Filter>ripple\nodestore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\nodestore\NodeObject.h">
+      <Filter>ripple\nodestore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\nodestore\Scheduler.h">
+      <Filter>ripple\nodestore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\nodestore\Task.h">
+      <Filter>ripple\nodestore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\nodestore\Types.h">
+      <Filter>ripple\nodestore</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\nodestore\backend\HyperDBFactory.cpp">
+      <Filter>ripple\nodestore\backend</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\nodestore\backend\HyperDBFactory.h">
+      <Filter>ripple\nodestore\backend</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\nodestore\backend\LevelDBFactory.cpp">
+      <Filter>ripple\nodestore\backend</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\nodestore\backend\LevelDBFactory.h">
+      <Filter>ripple\nodestore\backend</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\nodestore\backend\MemoryFactory.cpp">
+      <Filter>ripple\nodestore\backend</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\nodestore\backend\MemoryFactory.h">
+      <Filter>ripple\nodestore\backend</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\nodestore\backend\NullFactory.cpp">
+      <Filter>ripple\nodestore\backend</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\nodestore\backend\NullFactory.h">
+      <Filter>ripple\nodestore\backend</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\nodestore\backend\RocksDBFactory.cpp">
+      <Filter>ripple\nodestore\backend</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\nodestore\backend\RocksDBFactory.h">
+      <Filter>ripple\nodestore\backend</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\nodestore\impl\Backend.cpp">
+      <Filter>ripple\nodestore\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\nodestore\impl\BatchWriter.cpp">
+      <Filter>ripple\nodestore\impl</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\nodestore\impl\BatchWriter.h">
+      <Filter>ripple\nodestore\impl</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\nodestore\impl\Database.cpp">
+      <Filter>ripple\nodestore\impl</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\nodestore\impl\DatabaseImp.h">
+      <Filter>ripple\nodestore\impl</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\nodestore\impl\DecodedBlob.cpp">
+      <Filter>ripple\nodestore\impl</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\nodestore\impl\DecodedBlob.h">
+      <Filter>ripple\nodestore\impl</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\nodestore\impl\DummyScheduler.cpp">
+      <Filter>ripple\nodestore\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\nodestore\impl\EncodedBlob.cpp">
+      <Filter>ripple\nodestore\impl</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\nodestore\impl\EncodedBlob.h">
+      <Filter>ripple\nodestore\impl</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\nodestore\impl\Factory.cpp">
+      <Filter>ripple\nodestore\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\nodestore\impl\Manager.cpp">
+      <Filter>ripple\nodestore\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\nodestore\impl\NodeObject.cpp">
+      <Filter>ripple\nodestore\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\nodestore\impl\Scheduler.cpp">
+      <Filter>ripple\nodestore\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\nodestore\impl\Task.cpp">
+      <Filter>ripple\nodestore\impl</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\nodestore\impl\Tuning.h">
+      <Filter>ripple\nodestore\impl</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\nodestore\tests\BackendTests.cpp">
+      <Filter>ripple\nodestore\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\nodestore\tests\BasicTests.cpp">
+      <Filter>ripple\nodestore\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\nodestore\tests\DatabaseTests.cpp">
+      <Filter>ripple\nodestore\tests</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\nodestore\tests\TestBase.h">
+      <Filter>ripple\nodestore\tests</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\nodestore\tests\TimingTests.cpp">
+      <Filter>ripple\nodestore\tests</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\overlay\Message.h">
+      <Filter>ripple\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\overlay\Overlay.h">
+      <Filter>ripple\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\overlay\Peer.h">
+      <Filter>ripple\overlay</Filter>
+    </ClInclude>
+    <None Include="..\..\src\ripple\overlay\README.md">
+      <Filter>ripple\overlay</Filter>
+    </None>
+    <ClCompile Include="..\..\src\ripple\overlay\impl\Message.cpp">
+      <Filter>ripple\overlay\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ripple\overlay\impl\OverlayImpl.cpp">
+      <Filter>ripple\overlay\impl</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\overlay\impl\OverlayImpl.h">
+      <Filter>ripple\overlay\impl</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\overlay\impl\PeerDoor.cpp">
+      <Filter>ripple\overlay\impl</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\overlay\impl\PeerDoor.h">
+      <Filter>ripple\overlay\impl</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\overlay\impl\PeerImp.cpp">
+      <Filter>ripple\overlay\impl</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\overlay\impl\PeerImp.h">
+      <Filter>ripple\overlay\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\overlay\impl\Tuning.h">
+      <Filter>ripple\overlay\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\overlay\impl\abstract_protocol_handler.h">
+      <Filter>ripple\overlay\impl</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\src\ripple\overlay\impl\message_name.cpp">
+      <Filter>ripple\overlay\impl</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\src\ripple\overlay\impl\message_name.h">
+      <Filter>ripple\overlay\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\overlay\impl\message_stream.h">
+      <Filter>ripple\overlay\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\overlay\impl\peer_protocol_detector.h">
+      <Filter>ripple\overlay\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\overlay\make_Overlay.h">
+      <Filter>ripple\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ripple\overlay\predicates.h">
+      <Filter>ripple\overlay</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\ripple\peerfinder\api\Callback.h">
       <Filter>ripple\peerfinder\api</Filter>
     </ClInclude>
@@ -4773,6 +4788,9 @@
     <ClInclude Include="..\..\src\ripple\unity\net.h">
       <Filter>ripple\unity</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\src\ripple\unity\nodestore.cpp">
+      <Filter>ripple\unity</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\ripple\unity\overlay.cpp">
       <Filter>ripple\unity</Filter>
     </ClCompile>

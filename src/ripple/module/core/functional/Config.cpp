@@ -17,6 +17,7 @@
 */
 //==============================================================================
 
+#include <ripple/basics/utility/IniFile.h>
 #include <beast/module/core/text/LexicalCast.h>
 
 namespace ripple {
@@ -197,7 +198,6 @@ void Config::setup (const std::string& strConf, bool bQuiet)
                 || (!getenv ("HOME") && (!getenv ("XDG_CONFIG_HOME") || !getenv ("XDG_DATA_HOME"))))
         {
             // Current working directory is fine, put dbs in a subdir.
-            nothing ();
         }
         else
         {

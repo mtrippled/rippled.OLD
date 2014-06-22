@@ -17,9 +17,11 @@
 */
 //==============================================================================
 
+#include <ripple/basics/system/CheckLibraryVersions.h>
+#include <ripple/basics/utility/Sustain.h>
+#include <ripple/basics/utility/ThreadName.h>
 #include <beast/unit_test.h>
 #include <beast/streams/debug_ostream.h>
-#include <ripple/module/basics/system/CheckLibraryVersions.h>
 
 namespace po = boost::program_options;
 
@@ -56,7 +58,7 @@ void startServer ()
             if (!getConfig ().QUIET)
                 Log::out() << "Startup RPC: " << jvCommand;
 
-            RPCHandler  rhHandler (&getApp().getOPs ());
+            RPCHandler  rhHandler (getApp().getOPs ());
 
             Resource::Charge loadType = Resource::feeReferenceRPC;
             Json::Value jvResult    = rhHandler.doCommand (jvCommand, Config::ADMIN, loadType);
@@ -71,64 +73,49 @@ void startServer ()
 
 void printHelp (const po::options_description& desc)
 {
-    using namespace std;
-
-    cerr << SYSTEM_NAME "d [options] <command> <params>" << endl;
-
-    cerr << desc << endl;
-
-    cerr << "Commands: " << endl;
-    cerr << "     account_info <account>|<nickname>|<seed>|<pass_phrase>|<key> [<ledger>] [strict]" << endl;
-    cerr << "     account_lines <account> <account>|\"\" [<ledger>]" << endl;
-    cerr << "     account_offers <account>|<nickname>|<account_public_key> [<ledger>]" << endl;
-    cerr << "     account_tx accountID [ledger_min [ledger_max [limit [offset]]]] [binary] [count] [descending]" << endl;
-    cerr << "     book_offers <taker_pays> <taker_gets> [<taker [<ledger> [<limit> [<proof> [<marker>]]]]]" << endl;
-    cerr << "     connect <ip> [<port>]" << endl;
-    cerr << "     consensus_info" << endl;
-    cerr << "     get_counts" << endl;
-    cerr << "     json <method> <json>" << endl;
-    cerr << "     ledger [<id>|current|closed|validated] [full]" << endl;
-    cerr << "     ledger_accept" << endl;
-    cerr << "     ledger_closed" << endl;
-    cerr << "     ledger_current" << endl;
-    cerr << "     ledger_header <ledger>" << endl;
-    cerr << "     logrotate " << endl;
-    cerr << "     peers" << endl;
-    cerr << "     proof_create [<difficulty>] [<secret>]" << endl;
-    cerr << "     proof_solve <token>" << endl;
-    cerr << "     proof_verify <token> <solution> [<difficulty>] [<secret>]" << endl;
-    cerr << "     random" << endl;
-    cerr << "     ripple ..." << endl;
-    cerr << "     ripple_path_find <json> [<ledger>]" << endl;
-    //  cerr << "     send <seed> <paying_account> <account_id> <amount> [<currency>] [<send_max>] [<send_currency>]" << endl;
-    cerr << "     stop" << endl;
-    cerr << "     tx <id>" << endl;
-    cerr << "     unl_add <domain>|<public> [<comment>]" << endl;
-    cerr << "     unl_delete <domain>|<public_key>" << endl;
-    cerr << "     unl_list" << endl;
-    cerr << "     unl_load" << endl;
-    cerr << "     unl_network" << endl;
-    cerr << "     unl_reset" << endl;
-    cerr << "     validation_create [<seed>|<pass_phrase>|<key>]" << endl;
-    cerr << "     validation_seed [<seed>|<pass_phrase>|<key>]" << endl;
-    cerr << "     wallet_add <regular_seed> <paying_account> <master_seed> [<initial_funds>] [<account_annotation>]" << endl;
-    cerr << "     wallet_accounts <seed>" << endl;
-    cerr << "     wallet_claim <master_seed> <regular_seed> [<source_tag>] [<account_annotation>]" << endl;
-    cerr << "     wallet_seed [<seed>|<passphrase>|<passkey>]" << endl;
-    cerr << "     wallet_propose [<passphrase>]" << endl;
-
-    // Transaction helpers (that were removed):
-    //  cerr << "     account_domain_set <seed> <paying_account> [<domain>]" << endl;
-    //  cerr << "     account_email_set <seed> <paying_account> [<email_address>]" << endl;
-    //  cerr << "     account_rate_set <seed> <paying_account> <rate>" << endl;
-    //  cerr << "     account_wallet_set <seed> <paying_account> [<wallet_hash>]" << endl;
-    //  cerr << "     nickname_info <nickname>" << endl;
-    //  cerr << "     nickname_set <seed> <paying_account> <nickname> [<offer_minimum>] [<authorization>]" << endl;
-    //  cerr << "     offer_create <seed> <paying_account> <taker_pays_amount> <taker_pays_currency> <taker_pays_issuer> <takers_gets_amount> <takers_gets_currency> <takers_gets_issuer> <expires> [passive]" << endl;
-    //  cerr << "     offer_cancel <seed> <paying_account> <sequence>" << endl;
-    //  cerr << "     password_fund <seed> <paying_account> [<account>]" << endl;
-    //  cerr << "     password_set <master_seed> <regular_seed> [<account>]" << endl;
-    //  cerr << "     trust_set <seed> <paying_account> <destination_account> <limit_amount> <currency> [<quality_in>] [<quality_out>]" << endl;
+    std::cerr
+        << SYSTEM_NAME "d [options] <command> <params>\n"
+        << desc << std::endl
+        << "Commands: \n"
+           "     account_info <account>|<nickname>|<seed>|<pass_phrase>|<key> [<ledger>] [strict]\n"
+           "     account_lines <account> <account>|\"\" [<ledger>]\n"
+           "     account_offers <account>|<nickname>|<account_public_key> [<ledger>]\n"
+           "     account_tx accountID [ledger_min [ledger_max [limit [offset]]]] [binary] [count] [descending]\n"
+           "     book_offers <taker_pays> <taker_gets> [<taker [<ledger> [<limit> [<proof> [<marker>]]]]]\n"
+           "     connect <ip> [<port>]\n"
+           "     consensus_info\n"
+           "     get_counts\n"
+           "     json <method> <json>\n"
+           "     ledger [<id>|current|closed|validated] [full]\n"
+           "     ledger_accept\n"
+           "     ledger_closed\n"
+           "     ledger_current\n"
+           "     ledger_request <ledger>\n"
+           "     ledger_header <ledger>\n"
+           "     logrotate \n"
+           "     peers\n"
+           "     proof_create [<difficulty>] [<secret>]\n"
+           "     proof_solve <token>\n"
+           "     proof_verify <token> <solution> [<difficulty>] [<secret>]\n"
+           "     random\n"
+           "     ripple ...\n"
+           "     ripple_path_find <json> [<ledger>]\n"
+           "     server_info\n"
+           "     stop\n"
+           "     tx <id>\n"
+           "     unl_add <domain>|<public> [<comment>]\n"
+           "     unl_delete <domain>|<public_key>\n"
+           "     unl_list\n"
+           "     unl_load\n"
+           "     unl_network\n"
+           "     unl_reset\n"
+           "     validation_create [<seed>|<pass_phrase>|<key>]\n"
+           "     validation_seed [<seed>|<pass_phrase>|<key>]\n"
+           "     wallet_accounts <seed>\n"
+           "     wallet_add <regular_seed> <paying_account> <master_seed> [<initial_funds>] [<account_annotation>]\n"
+           "     wallet_claim <master_seed> <regular_seed> [<source_tag>] [<account_annotation>]\n"
+           "     wallet_propose [<passphrase>]\n"
+           "     wallet_seed [<seed>|<passphrase>|<passkey>]\n";
 }
 
 //------------------------------------------------------------------------------
@@ -222,21 +209,17 @@ int run (int argc, char** argv)
         iResult = 2;
     }
 
-    if (iResult)
-    {
-        nothing ();
-    }
-    else
+    if (!iResult)
     {
         // Parse options, if no error.
         try
         {
             po::store (po::command_line_parser (argc, argv)
-                       .options (desc)                                         // Parse options.
-                       .positional (p)                                         // Remainder as --parameters.
-                       .run (),
-                       vm);
-            po::notify (vm);                                            // Invoke option notify functions.
+                .options (desc)               // Parse options.
+                .positional (p)               // Remainder as --parameters.
+                .run (),
+                vm);
+            po::notify (vm);                  // Invoke option notify functions.
         }
         catch (...)
         {
@@ -244,11 +227,7 @@ int run (int argc, char** argv)
         }
     }
 
-    if (iResult)
-    {
-        nothing ();
-    }
-    else if (vm.count ("help"))
+    if (!iResult && vm.count ("help"))
     {
         iResult = 1;
     }

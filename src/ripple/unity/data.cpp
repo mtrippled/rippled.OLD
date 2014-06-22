@@ -17,13 +17,12 @@
 */
 //==============================================================================
 
-#include "../../BeastConfig.h"
+#include <BeastConfig.h>
 
 #include <ripple/unity/data.h>
 
 //#include <cmath>
 
-#include <beast/module/core/system/BeforeBoost.h>
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/trim.hpp>
@@ -43,7 +42,7 @@
 #include <openssl/err.h>
 
 #include <ripple/unity/sslutil.h>
-#include <ripple/module/rpc/api/ErrorCodes.h>
+#include <ripple/module/rpc/ErrorCodes.h>
 #include <ripple/common/jsonrpc_fields.h>
 
 // VFALCO TODO fix these warnings!

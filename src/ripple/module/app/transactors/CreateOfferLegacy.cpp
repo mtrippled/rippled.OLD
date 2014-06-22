@@ -280,38 +280,49 @@ bool CreateOfferLegacy::applyOffer (
     {
         // Compute fees in a rounding safe way.
 
-        STAmount    saTransferRate  = STAmount (CURRENCY_ONE, ACCOUNT_ONE, uTakerPaysRate, -9);
-        m_journal.info << "applyOffer: saTransferRate=" << saTransferRate.getFullText ();
+        STAmount transferRate (CURRENCY_ONE, ACCOUNT_ONE, uTakerPaysRate, -9);
+        m_journal.info << "applyOffer: transferRate="
+                       << transferRate.getFullText ();
 
         // TakerCost includes transfer fees.
-        STAmount    saTakerCost     = STAmount::mulRound (saTakerPaid, saTransferRate, true);
+        STAmount saTakerCost = STAmount::mulRound (
+            saTakerPaid, transferRate, true);
 
-        m_journal.info << "applyOffer: saTakerCost=" << saTakerCost.getFullText ();
-        m_journal.info << "applyOffer: saTakerFunds=" << saTakerFunds.getFullText ();
+        m_journal.info << "applyOffer: saTakerCost="
+                       << saTakerCost.getFullText ();
+        m_journal.info << "applyOffer: saTakerFunds="
+                       << saTakerFunds.getFullText ();
         saTakerIssuerFee    = saTakerCost > saTakerFunds
-                              ? saTakerFunds - saTakerPaid // Not enough funds to cover fee, stiff issuer the rounding error.
+                              ? saTakerFunds - saTakerPaid
+            // Not enough funds to cover fee, stiff issuer the rounding error.
                               : saTakerCost - saTakerPaid;
-        m_journal.info << "applyOffer: saTakerIssuerFee=" << saTakerIssuerFee.getFullText ();
+        m_journal.info << "applyOffer: saTakerIssuerFee="
+                       << saTakerIssuerFee.getFullText ();
         assert (saTakerIssuerFee >= zero);
     }
 
     if (uOfferPaysRate == QUALITY_ONE)
     {
-        saOfferIssuerFee    = STAmount (saTakerGot.getCurrency (), saTakerGot.getIssuer ());
+        saOfferIssuerFee = STAmount (
+            saTakerGot.getCurrency (), saTakerGot.getIssuer ());
     }
     else
     {
         // Compute fees in a rounding safe way.
-        STAmount    saOfferCost = STAmount::mulRound (saTakerGot, STAmount (CURRENCY_ONE, ACCOUNT_ONE, uOfferPaysRate, -9), true);
+        STAmount saOfferCost = STAmount::mulRound (
+            saTakerGot, STAmount (CURRENCY_ONE, ACCOUNT_ONE, uOfferPaysRate, -9),
+            true);
 
-        saOfferIssuerFee    = saOfferCost > saOfferFunds
-                              ? saOfferFunds - saTakerGot // Not enough funds to cover fee, stiff issuer the rounding error.
-                              : saOfferCost - saTakerGot;
+        saOfferIssuerFee = saOfferCost > saOfferFunds
+            ? saOfferFunds - saTakerGot
+            // Not enough funds to cover fee, stiff issuer the rounding error.
+            : saOfferCost - saTakerGot;
     }
 
     m_journal.info << "applyOffer: saTakerGot=" << saTakerGot.getFullText ();
 
-    return saTakerGot >= saOfferPaysAvailable;              // True, if consumed offer.
+    return saTakerGot >= saOfferPaysAvailable;
+    // True, if consumed offer.
 }
 
 /** Take as much as possible.
@@ -366,8 +377,10 @@ TER CreateOfferLegacy::takeOffers (
     // Accounts touched.
     std::unordered_set<uint160, beast::hardened_hash<uint160>> usAccountTouched;
 
-    saTakerPaid = STAmount (saTakerPays.getCurrency (), saTakerPays.getIssuer ());
-    saTakerGot = STAmount (saTakerGets.getCurrency (), saTakerGets.getIssuer ());
+    saTakerPaid = STAmount (
+        saTakerPays.getCurrency (), saTakerPays.getIssuer ());
+    saTakerGot = STAmount (
+        saTakerGets.getCurrency (), saTakerGets.getIssuer ());
     bUnfunded = false;
 
     // TODO: need to track the synthesized book (source->XRP + XRP->target)
@@ -654,14 +667,14 @@ TER CreateOfferLegacy::takeOffers (
     if (tesSUCCESS == terResult)
     {
         // On success, delete offers that became unfunded.
-        for (auto uOfferIndex : usOfferUnfundedBecame)
+        for (auto offerIndex : usOfferUnfundedBecame)
         {
             m_journal.debug <<
 
                 "takeOffers: became unfunded: " <<
-                    to_string (uOfferIndex);
+                    to_string (offerIndex);
 
-            lesActive.offerDelete (uOfferIndex);
+            lesActive.offerDelete (offerIndex);
         }
     }
 
@@ -677,10 +690,10 @@ TER CreateOfferLegacy::doApply ()
         "OfferCreate> " << mTxn.getJson (0);
 
     std::uint32_t const uTxFlags = mTxn.getFlags ();
-    bool const bPassive = is_bit_set (uTxFlags, tfPassive);
-    bool const bImmediateOrCancel = is_bit_set (uTxFlags, tfImmediateOrCancel);
-    bool const bFillOrKill = is_bit_set (uTxFlags, tfFillOrKill);
-    bool const bSell = is_bit_set (uTxFlags, tfSell);
+    bool const bPassive (uTxFlags & tfPassive);
+    bool const bImmediateOrCancel (uTxFlags & tfImmediateOrCancel);
+    bool const bFillOrKill (uTxFlags & tfFillOrKill);
+    bool const bSell (uTxFlags & tfSell);
     STAmount saTakerPays = mTxn.getFieldAmount (sfTakerPays);
     STAmount saTakerGets = mTxn.getFieldAmount (sfTakerGets);
 
@@ -852,9 +865,9 @@ TER CreateOfferLegacy::doApply ()
                 "delay: can't receive IOUs from non-existent issuer: " <<
                 RippleAddress::createHumanAccountID (uPaysIssuerID);
 
-            terResult   = is_bit_set (mParams, tapRETRY) ? terNO_ACCOUNT : tecNO_ISSUER;
+            terResult   = (mParams & tapRETRY) ? terNO_ACCOUNT : tecNO_ISSUER;
         }
-        else if (is_bit_set (sleTakerPays->getFieldU32 (sfFlags), lsfRequireAuth))
+        else if (sleTakerPays->getFieldU32 (sfFlags) & lsfRequireAuth)
         {
             SLE::pointer sleRippleState (mEngine->entryCache (
                 ltRIPPLE_STATE,
@@ -869,16 +882,16 @@ TER CreateOfferLegacy::doApply ()
 
             if (!sleRippleState)
             {
-                terResult   = is_bit_set (mParams, tapRETRY)
+                terResult   = (mParams & tapRETRY)
                     ? terNO_LINE
                     : tecNO_LINE;
             }
-            else if (!is_bit_set (sleRippleState->getFieldU32 (sfFlags), (canonical_gt ? lsfLowAuth : lsfHighAuth)))
+            else if (!(sleRippleState->getFieldU32 (sfFlags) & (canonical_gt ? lsfLowAuth : lsfHighAuth)))
             {
                 m_journal.debug <<
                     "delay: can't receive IOUs from issuer without auth.";
 
-                terResult   = is_bit_set (mParams, tapRETRY) ? terNO_AUTH : tecNO_AUTH;
+                terResult   = (mParams & tapRETRY) ? terNO_AUTH : tecNO_AUTH;
             }
         }
     }
@@ -886,7 +899,7 @@ TER CreateOfferLegacy::doApply ()
     STAmount        saPaid;
     STAmount        saGot;
     bool            bUnfunded   = false;
-    const bool      bOpenLedger = is_bit_set (mParams, tapOPEN_LEDGER);
+    const bool      bOpenLedger = (mParams & tapOPEN_LEDGER);
 
     if ((tesSUCCESS == terResult) && !bExpired)
     {
@@ -958,12 +971,10 @@ TER CreateOfferLegacy::doApply ()
     if (tesSUCCESS != terResult)
     {
         // Fail as is.
-        nothing ();
     }
     else if (bExpired)
     {
         // nothing to do
-        nothing ();
     }
     else if (saTakerPays < zero || saTakerGets < zero)
     {
@@ -986,7 +997,6 @@ TER CreateOfferLegacy::doApply ()
         || bUnfunded)                                                   // Consider unfunded.
     {
         // Complete as is.
-        nothing ();
     }
     else if (mPriorBalance.getNValue () < mEngine->getLedger ()->getReserve (sleCreator->getFieldU32 (sfOwnerCount) + 1))
     {
@@ -1016,7 +1026,6 @@ TER CreateOfferLegacy::doApply ()
             // something.
 
             // Consider the offer unfunded. Treat as tesSUCCESS.
-            nothing ();
         }
     }
     else
@@ -1120,11 +1129,11 @@ TER CreateOfferLegacy::doApply ()
     {
 
         // Go through the list of unfunded offers and remove them
-        for (auto const& uOfferIndex : usOfferUnfundedFound)
+        for (auto const& offerIndex : usOfferUnfundedFound)
         {
             m_journal.trace <<
-                "takeOffers: found unfunded: " << to_string (uOfferIndex);
-            lesActive.offerDelete (uOfferIndex);
+                "takeOffers: found unfunded: " << to_string (offerIndex);
+            lesActive.offerDelete (offerIndex);
         }
 
         // Go through the list of offers not found and remove them from the

@@ -18,6 +18,9 @@
 //==============================================================================
 
 #include <ripple/common/RippleSSLContext.h>
+#include <ripple/module/app/main/RPCHTTPServer.h>
+#include <ripple/module/rpc/RPCHandler.h>
+#include <ripple/module/rpc/RPCServerHandler.h>
 
 namespace ripple {
 
@@ -137,9 +140,9 @@ public:
         // The "boost::"'s are a workaround for broken versions of tr1::functional that
         // require the reference wrapper to be callable. HTTP::Session has abstract functions
         // and so references to it are not callable.
-        m_jobQueue.addJob (jtRPC, "RPC", boost::bind (
-            &RPCHTTPServerImp::processSession, this, boost::_1,
-                boost::ref (session)));
+        m_jobQueue.addJob (jtRPC, "RPC", std::bind (
+            &RPCHTTPServerImp::processSession, this, std::placeholders::_1,
+                std::ref (session)));
 #endif
     }
 
@@ -256,7 +259,7 @@ public:
 
         m_journal.debug << "Query: " << strMethod << params;
 
-        RPCHandler rpcHandler (&m_networkOPs);
+        RPCHandler rpcHandler (m_networkOPs);
 
         Resource::Charge loadType = Resource::feeReferenceRPC;
 

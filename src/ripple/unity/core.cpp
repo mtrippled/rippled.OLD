@@ -17,7 +17,7 @@
 */
 //==============================================================================
 
-#include "../../BeastConfig.h"
+#include <BeastConfig.h>
 
 #include <ripple/unity/core.h>
 
@@ -25,11 +25,9 @@
 #include <map>
 #include <set>
 
-#include <beast/module/core/system/BeforeBoost.h>
 #include <boost/algorithm/string.hpp>
 #include <boost/foreach.hpp>
 
-#include <ripple/module/core/nodestore/NodeStore.cpp>
 #include <beast/http/ParsedURL.h>
 #include <ripple/unity/net.h> // for HTTPClient
 

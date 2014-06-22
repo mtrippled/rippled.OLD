@@ -26,15 +26,13 @@
 #undef DEPRECATED_IN_MAC_OS_X_VERSION_10_7_AND_LATER
 #define DEPRECATED_IN_MAC_OS_X_VERSION_10_7_AND_LATER /**/
 
-#include "../../BeastConfig.h"
+#include <BeastConfig.h>
 
-#include <beast/module/core/system/BeforeBoost.h>
 #include <boost/version.hpp>
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/ssl.hpp>
 #include <boost/asio.hpp>
 #include <boost/make_shared.hpp>
-#include <boost/bind.hpp>
 #include <boost/array.hpp>
 #include <boost/foreach.hpp>
 #include <boost/mpl/at.hpp>
@@ -48,7 +46,7 @@
 //             directly (instead of the module header). The corresponding .cpp
 //             still uses the unity style inclusion.
 //
-#include <ripple/module/rpc/api/ErrorCodes.h>
+#include <ripple/module/rpc/ErrorCodes.h>
 #include <ripple/common/jsonrpc_fields.h>
 
 #include <ripple/module/net/basics/HTTPRequest.cpp>

@@ -17,17 +17,23 @@
 */
 //==============================================================================
 
-#include <ripple/module/app/main/Tuning.h>
+#include <fstream>
 
-#include <ripple/common/seconds_clock.h>
-#include <ripple/module/rpc/api/Manager.h>
-#include <ripple/module/overlay/api/make_Overlay.h>
-#include <ripple/module/overlay/api/make_Overlay.h>
-#include <ripple/common/seconds_clock.h>
-#include <ripple/module/rpc/api/Manager.h>
-
+#include <beast/asio/io_latency_probe.h>
 #include <beast/module/core/thread/DeadlineTimer.h>
-
+#include <ripple/basics/utility/Sustain.h>
+#include <ripple/common/seconds_clock.h>
+#include <ripple/module/app/main/Tuning.h>
+#include <ripple/module/app/misc/ProofOfWorkFactory.h>
+#include <ripple/module/rpc/Manager.h>
+#include <ripple/nodestore/Database.h>
+#include <ripple/nodestore/DummyScheduler.h>
+#include <ripple/nodestore/Manager.h>
+#include <ripple/overlay/make_Overlay.h>
+#include <beast/asio/io_latency_probe.h>
+#include <beast/module/core/thread/DeadlineTimer.h>
+#include <fstream>
+    
 namespace ripple {
 
 // VFALCO TODO Clean this global up
@@ -1018,7 +1024,7 @@ public:
             // VFALCO NOTE This is a sign that something is wrong somewhere, it
             //             shouldn't be necessary to sleep until some flag is set.
             while (mShutdown)
-                boost::this_thread::sleep (boost::posix_time::milliseconds (100));
+                std::this_thread::sleep_for (std::chrono::milliseconds (100));
         }
     }
 
@@ -1068,25 +1074,25 @@ public:
 
         m_fullBelowCache->sweep ();
 
-        logTimedCall (m_journal.warning, "TransactionMaster::sweep", __FILE__, __LINE__, boost::bind (
+        logTimedCall (m_journal.warning, "TransactionMaster::sweep", __FILE__, __LINE__, std::bind (
             &TransactionMaster::sweep, &m_txMaster));
 
-        logTimedCall (m_journal.warning, "NodeStore::sweep", __FILE__, __LINE__, boost::bind (
+        logTimedCall (m_journal.warning, "NodeStore::sweep", __FILE__, __LINE__, std::bind (
             &NodeStore::Database::sweep, m_nodeStore.get ()));
 
-        logTimedCall (m_journal.warning, "LedgerMaster::sweep", __FILE__, __LINE__, boost::bind (
+        logTimedCall (m_journal.warning, "LedgerMaster::sweep", __FILE__, __LINE__, std::bind (
             &LedgerMaster::sweep, m_ledgerMaster.get()));
 
-        logTimedCall (m_journal.warning, "TempNodeCache::sweep", __FILE__, __LINE__, boost::bind (
+        logTimedCall (m_journal.warning, "TempNodeCache::sweep", __FILE__, __LINE__, std::bind (
             &NodeCache::sweep, &m_tempNodeCache));
 
-        logTimedCall (m_journal.warning, "Validations::sweep", __FILE__, __LINE__, boost::bind (
+        logTimedCall (m_journal.warning, "Validations::sweep", __FILE__, __LINE__, std::bind (
             &Validations::sweep, mValidations.get ()));
 
-        logTimedCall (m_journal.warning, "InboundLedgers::sweep", __FILE__, __LINE__, boost::bind (
+        logTimedCall (m_journal.warning, "InboundLedgers::sweep", __FILE__, __LINE__, std::bind (
             &InboundLedgers::sweep, &getInboundLedgers ()));
 
-        logTimedCall (m_journal.warning, "SLECache::sweep", __FILE__, __LINE__, boost::bind (
+        logTimedCall (m_journal.warning, "SLECache::sweep", __FILE__, __LINE__, std::bind (
             &SLECache::sweep, &m_sleCache));
 
         logTimedCall (m_journal.warning, "AcceptedLedger::sweep", __FILE__, __LINE__,
@@ -1095,7 +1101,7 @@ public:
         logTimedCall (m_journal.warning, "SHAMap::sweep", __FILE__, __LINE__,
             &SHAMap::sweep);
 
-        logTimedCall (m_journal.warning, "NetworkOPs::sweepFetchPack", __FILE__, __LINE__, boost::bind (
+        logTimedCall (m_journal.warning, "NetworkOPs::sweepFetchPack", __FILE__, __LINE__, std::bind (
             &NetworkOPs::sweepFetchPack, m_networkOPs.get ()));
 
         // VFALCO NOTE does the call to sweep() happen on another thread?
@@ -1135,10 +1141,10 @@ void ApplicationImp::startNewLedger ()
         firstLedger->setAccepted ();
         m_ledgerMaster->pushLedger (firstLedger);
 
-        Ledger::pointer secondLedger = std::make_shared<Ledger> (true, boost::ref (*firstLedger));
+        Ledger::pointer secondLedger = std::make_shared<Ledger> (true, std::ref (*firstLedger));
         secondLedger->setClosed ();
         secondLedger->setAccepted ();
-        m_ledgerMaster->pushLedger (secondLedger, std::make_shared<Ledger> (true, boost::ref (*secondLedger)));
+        m_ledgerMaster->pushLedger (secondLedger, std::make_shared<Ledger> (true, std::ref (*secondLedger)));
         assert (!!secondLedger->getAccountState (rootAddress));
         m_networkOPs->setLastCloseTime (secondLedger->getCloseTimeNC ());
     }
@@ -1229,7 +1235,8 @@ bool ApplicationImp::loadOldLedger (
                                  m_journal.warning << "Invalid entry in ledger";
                              }
                          }
-                         // TODO(david): close ledger, update hash
+
+                         loadLedger->setAccepted();
                      }
                  }
             }
@@ -1242,6 +1249,16 @@ bool ApplicationImp::loadOldLedger (
             uint256 hash;
             hash.SetHex (ledgerID);
             loadLedger = Ledger::loadByHash (hash);
+
+            if (!loadLedger)
+            {
+                // Try to build the ledger from the back end
+                auto il = std::make_shared <InboundLedger> (hash, 0, InboundLedger::fcGENERIC,
+                    get_seconds_clock ());
+                if (il->checkLocal ())
+                    loadLedger = il->getLedger ();
+            }
+
         }
         else // assume by sequence
             loadLedger = Ledger::loadByIndex (
@@ -1262,12 +1279,23 @@ bool ApplicationImp::loadOldLedger (
             replayLedger = loadLedger;
 
             // this is the prior ledger
-            loadLedger = Ledger::loadByIndex (replayLedger->getLedgerSeq() - 1);
-            if (!loadLedger || (replayLedger->getParentHash() != loadLedger->getHash()))
+            loadLedger = Ledger::loadByHash (replayLedger->getParentHash ());
+            if (!loadLedger)
             {
-                m_journal.fatal << "Replay ledger missing/damaged";
-                assert (false);
-                return false;
+
+                // Try to build the ledger from the back end
+                auto il = std::make_shared <InboundLedger> (
+                    replayLedger->getParentHash(), 0, InboundLedger::fcGENERIC,
+                    get_seconds_clock ());
+                if (il->checkLocal ())
+                    loadLedger = il->getLedger ();
+
+                if (!loadLedger)
+                {
+                    m_journal.fatal << "Replay ledger missing/damaged";
+                    assert (false);
+                    return false;
+                }
             }
         }
 
@@ -1298,16 +1326,20 @@ bool ApplicationImp::loadOldLedger (
 
         m_ledgerMaster->setLedgerRangePresent (loadLedger->getLedgerSeq (), loadLedger->getLedgerSeq ());
 
-        Ledger::pointer openLedger = std::make_shared<Ledger> (false, boost::ref (*loadLedger));
+        Ledger::pointer openLedger = std::make_shared<Ledger> (false, std::ref (*loadLedger));
         m_ledgerMaster->switchLedgers (loadLedger, openLedger);
         m_ledgerMaster->forceValid(loadLedger);
         m_networkOPs->setLastCloseTime (loadLedger->getCloseTimeNC ());
 
         if (replay)
         {
-            // inject transaction from replayLedger into consensus set
+            // inject transaction(s) from the replayLedger into our open ledger
             SHAMap::ref txns = replayLedger->peekTransactionMap();
-            Ledger::ref cur = getLedgerMaster().getCurrentLedger();
+
+            // Get a mutable snapshot of the open ledger
+            Ledger::pointer cur = getLedgerMaster().getCurrentLedger();
+            cur = std::make_shared <Ledger> (*cur, true);
+            assert (!cur->isImmutable());
 
             for (auto it = txns->peekFirstItem(); it != nullptr;
                  it = txns->peekNextItem(it->getTag()))
@@ -1319,6 +1351,9 @@ bool ApplicationImp::loadOldLedger (
                 if (!cur->addTransaction(it->getTag(), s))
                     m_journal.warning << "Unable to add transaction " << it->getTag();
             }
+
+            // Switch to the mutable snapshot
+            m_ledgerMaster->switchLedgers (loadLedger, cur);
         }
     }
     catch (SHAMapMissingNode&)

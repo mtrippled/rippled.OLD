@@ -20,6 +20,11 @@
 #ifndef RIPPLE_APP_NODESTORESCHEDULER_H_INCLUDED
 #define RIPPLE_APP_NODESTORESCHEDULER_H_INCLUDED
 
+#include <ripple/nodestore/Scheduler.h>
+#include <ripple/module/core/functional/JobQueue.h>
+#include <beast/threads/Stoppable.h>
+#include <atomic>
+
 namespace ripple {
 
 /** A NodeStore::Scheduler which uses the JobQueue and implements the Stoppable API. */
