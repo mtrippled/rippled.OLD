@@ -26,11 +26,6 @@
 
 namespace ripple {
 
-class FeeVoteLog;
-template <>
-char const*
-LogPartition::getPartitionName <FeeVoteLog>() { return "FeeVote"; }
-
 class NetworkOPsImp
     : public NetworkOPs
     , public beast::DeadlineTimer::Listener
@@ -54,7 +49,7 @@ public:
         , m_journal (journal)
         , m_localTX (LocalTxs::New ())
         , m_feeVote (make_FeeVote(10, 20 * SYSTEM_CURRENCY_PARTS,
-            5 * SYSTEM_CURRENCY_PARTS, LogPartition::getJournal <FeeVoteLog>()))
+            5 * SYSTEM_CURRENCY_PARTS, deprecatedLogs().journal("FeeVote")))
         , mMode (omDISCONNECTED)
         , mNeedNetworkLedger (false)
         , mProposing (false)
@@ -69,7 +64,7 @@ public:
         , mLastCloseTime (0)
         , mLastValidationTime (0)
         , mFetchPack ("FetchPack", 65536, 45, clock,
-            LogPartition::getJournal <TaggedCacheLog> ())
+            deprecatedLogs().journal("TaggedCache"))
         , mFetchSeq (0)
         , mLastLoadBase (256)
         , mLastLoadFactor (256)
@@ -235,7 +230,7 @@ public:
     void processTrustedProposal (LedgerProposal::pointer proposal, std::shared_ptr<protocol::TMProposeSet> set,
                                  RippleAddress nodePublic, uint256 checkLedger, bool sigGood);
     SHAMapAddNode gotTXData (const std::shared_ptr<Peer>& peer, uint256 const& hash,
-                             const std::list<SHAMapNode>& nodeIDs, const std::list< Blob >& nodeData);
+                             const std::list<SHAMapNodeID>& nodeIDs, const std::list< Blob >& nodeData);
     bool recvValidation (SerializedValidation::ref val, const std::string& source);
     void takePosition (int seq, SHAMap::ref position);
     SHAMap::pointer getTXMap (uint256 const& hash);
@@ -1613,7 +1608,7 @@ void NetworkOPsImp::takePosition (int seq, SHAMap::ref position)
 
 // Call with the master lock for now
 SHAMapAddNode NetworkOPsImp::gotTXData (const std::shared_ptr<Peer>& peer, uint256 const& hash,
-                                     const std::list<SHAMapNode>& nodeIDs, const std::list< Blob >& nodeData)
+                                     const std::list<SHAMapNodeID>& nodeIDs, const std::list< Blob >& nodeData)
 {
 
     if (!mConsensus)
@@ -1741,7 +1736,8 @@ void NetworkOPsImp::setMode (OperatingMode om)
 
     mMode = om;
 
-    Log ((om < mMode) ? lsWARNING : lsINFO) << "STATE->" << strOperatingMode ();
+    m_journal.stream((om < mMode) ? beast::Journal::kWarning : beast::Journal::kInfo) <<
+        "STATE->" << strOperatingMode ();
     pubServer ();
 }
 

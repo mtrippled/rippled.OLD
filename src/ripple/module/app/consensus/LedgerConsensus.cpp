@@ -21,10 +21,6 @@
 
 namespace ripple {
 
-SETUP_LOG (LedgerConsensus)
-
-// #define TRUST_NETWORK
-
 class LedgerConsensusImp
     : public LedgerConsensus
     , public std::enable_shared_from_this <LedgerConsensusImp>
@@ -798,7 +794,7 @@ public:
     /** A peer has sent us some nodes from a transaction set
     */
     SHAMapAddNode peerGaveNodes (Peer::ptr const& peer
-        , uint256 const& setHash, const std::list<SHAMapNode>& nodeIDs
+        , uint256 const& setHash, const std::list<SHAMapNodeID>& nodeIDs
         , const std::list< Blob >& nodeData)
     {
         auto acq (mAcquiring.find (setHash));
