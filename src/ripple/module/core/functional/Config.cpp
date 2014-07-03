@@ -136,6 +136,8 @@ Config::Config ()
 
     LEDGER_HISTORY          = 256;
     FETCH_DEPTH             = 1000000000;
+    ROTATE_DELETE           = 0;
+    ASYNC_DB                = false;
 
     PATH_SEARCH_OLD         = DEFAULT_PATH_SEARCH_OLD;
     PATH_SEARCH             = DEFAULT_PATH_SEARCH;
@@ -562,6 +564,15 @@ void Config::load ()
 
                 if (FETCH_DEPTH < 10)
                     FETCH_DEPTH = 10;
+            }
+            if (SectionSingleB (secConfig, SECTION_ROTATE_DELETE, strTemp))
+            {
+                ROTATE_DELETE =
+                    std::max (0, beast::lexicalCastThrow <int> (strTemp));
+            }
+            if (SectionSingleB (secConfig, SECTION_ASYNC_DB, strTemp))
+            {
+                ASYNC_DB            = beast::lexicalCastThrow <bool> (strTemp);
             }
 
             if (SectionSingleB (secConfig, SECTION_PATH_SEARCH_OLD, strTemp))

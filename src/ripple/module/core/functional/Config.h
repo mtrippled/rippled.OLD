@@ -469,6 +469,8 @@ public:
     std::uint32_t                      LEDGER_HISTORY;
     std::uint32_t                      FETCH_DEPTH;
     int                         NODE_SIZE;
+    std::uint32_t                      ROTATE_DELETE;
+    bool                               ASYNC_DB;
 
     // Client behavior
     int                         ACCOUNT_PROBE_MAX;      // How far to scan for accounts.

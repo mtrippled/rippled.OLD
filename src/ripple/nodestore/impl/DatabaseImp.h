@@ -42,6 +42,11 @@ public:
     std::unique_ptr <Backend> m_backend;
     // Larger key/value storage, but not necessarily persistent.
     std::unique_ptr <Backend> m_fastBackend;
+    /** for rotating databases */
+    std::shared_ptr <Backend>  m_currentBackend;
+    std::shared_ptr <Backend>  m_previousBackend;
+    std::shared_ptr <Backend>  m_currentFastBackend;
+    std::mutex                 m_rotatedbLock;    
 
     // Positive cache
     TaggedCache <uint256, NodeObject> m_cache;
@@ -63,11 +68,17 @@ public:
                  int readThreads,
                  std::unique_ptr <Backend> backend,
                  std::unique_ptr <Backend> fastBackend,
+                 std::shared_ptr <Backend> currentBackend,
+                 std::shared_ptr <Backend> previousBackend,
+                 std::shared_ptr <Backend> currentFastBackend,
                  beast::Journal journal)
         : m_journal (journal)
         , m_scheduler (scheduler)
         , m_backend (std::move (backend))
         , m_fastBackend (std::move (fastBackend))
+        , m_currentBackend (currentBackend)
+        , m_previousBackend (previousBackend)
+        , m_currentFastBackend (currentFastBackend)
         , m_cache ("NodeStore", cacheTargetSize, cacheTargetSeconds,
             get_seconds_clock (), deprecatedLogs().journal("TaggedCache"))
         , m_negCache ("NodeStore", get_seconds_clock (),
@@ -182,7 +193,7 @@ public:
         //
         if (m_fastBackend != nullptr)
         {
-            obj = fetchInternal (*m_fastBackend, hash);
+            obj = fetchInternal (false, hash);
 
             // If we found the object, avoid storing it again later.
             if (obj != nullptr)
@@ -195,7 +206,7 @@ public:
         {
             // Yes so at last we will try the main database.
             //
-            obj = fetchInternal (*m_backend, hash);
+            obj = fetchInternal (true, hash);
         }
 
         if (obj == nullptr)
@@ -233,30 +244,102 @@ public:
         return obj;
     }
 
-    NodeObject::Ptr fetchInternal (Backend& backend,
-        uint256 const& hash)
+    NodeObject::Ptr fetchInternal (bool isBackend, uint256 const& hash)
     {
         NodeObject::Ptr object;
+        Status status;
 
-        Status const status = backend.fetch (hash.begin (), &object);
-
-        switch (status)
+        if (getConfig ().ROTATE_DELETE == 0)
         {
-        case ok:
-        case notFound:
-            break;
+            if (isBackend == true)
+            {
+                status = m_backend->fetch (hash.begin (), &object);
+            }
+            else
+            {
+                status = m_fastBackend->fetch (hash.begin (), &object);
+            }
 
-        case dataCorrupt:
-            // VFALCO TODO Deal with encountering corrupt data!
-            //
-            if (m_journal.fatal) m_journal.fatal <<
-                "Corrupt NodeObject #" << hash;
-            break;
+            switch (status)
+            {
+            case ok:
+            case notFound:
+                break;
 
-        default:
-            if (m_journal.warning) m_journal.warning <<
-                "Unknown status=" << status;
-            break;
+            case dataCorrupt:
+                // VFALCO TODO Deal with encountering corrupt data!
+                //
+                if (m_journal.fatal) m_journal.fatal <<
+                                         "Corrupt NodeObject #" << hash;
+                break;
+
+            default:
+                if (m_journal.warning) m_journal.warning <<
+                                           "Unknown status=" << status;
+                break;
+            }
+        }
+        else
+        {
+            std::shared_ptr <Backend> current;
+            std::shared_ptr <Backend> previous;
+
+            if (isBackend == true)
+            {
+                std::lock_guard <std::mutex> lock (m_rotatedbLock);
+                current = m_currentBackend;
+                previous = m_previousBackend;
+            }
+            else
+            {
+                std::lock_guard <std::mutex> lock (m_rotatedbLock);
+                current = m_currentFastBackend;
+            }
+            status = current->fetch (hash.begin (), &object);
+
+            switch (status)
+            {
+            case ok:
+            case notFound:
+                break;
+
+            case dataCorrupt:
+                // VFALCO TODO Deal with encountering corrupt data!
+                //
+                if (m_journal.fatal) m_journal.fatal <<
+                                         "Corrupt NodeObject #" << hash;
+                break;
+
+            default:
+                if (m_journal.warning) m_journal.warning <<
+                                           "Unknown status=" << status;
+                break;
+            }
+
+            if (status != ok && isBackend == true)
+            {
+                status = previous->fetch (hash.begin (), &object);
+                
+                switch (status)
+                {
+                case ok:
+                    current->store (object);
+                case notFound:
+                    break;
+
+                case dataCorrupt:
+                    // VFALCO TODO Deal with encountering corrupt data!
+                    //
+                    if (m_journal.fatal) m_journal.fatal <<
+                                             "Corrupt NodeObject #" << hash;
+                    break;
+
+                default:
+                    if (m_journal.warning) m_journal.warning <<
+                                               "Unknown status=" << status;
+                    break;
+                }
+            }
         }
 
         return object;
@@ -277,7 +360,19 @@ public:
 
         m_cache.canonicalize (hash, object, true);
 
-        m_backend->store (object);
+        if (getConfig ().ROTATE_DELETE == 0)
+        {
+            m_backend->store (object);
+        }
+        else
+        {
+            std::shared_ptr <Backend> current;
+            {
+                std::lock_guard <std::mutex> lock (m_rotatedbLock);
+                current = m_currentBackend;
+            }
+            current->store (object);
+        }
 
         m_negCache.erase (hash);
 

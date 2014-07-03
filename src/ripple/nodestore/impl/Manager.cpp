@@ -124,16 +124,55 @@ public:
         Parameters const& backendParameters,
         Parameters fastBackendParameters)
     {
-        std::unique_ptr <Backend> backend (make_Backend (
-            backendParameters, scheduler, journal));
+        std::unique_ptr <Backend> backend;
+        std::shared_ptr <Backend> currentBackend;
+        std::shared_ptr <Backend> previousBackend;
+        std::unique_ptr <Backend> fastBackend;
+        std::shared_ptr <Backend> currentFastBackend;
 
-        std::unique_ptr <Backend> fastBackend (
-            (fastBackendParameters.size () > 0)
+        if (getConfig ().ROTATE_DELETE == 0)
+        {
+            backend = make_Backend (backendParameters, scheduler, journal);
+
+            fastBackend =
+                (fastBackendParameters.size () > 0)
                 ? make_Backend (fastBackendParameters, scheduler, journal)
-                : nullptr);
+                : nullptr;
+        }
+        else
+        {
+            Parameters p = backendParameters;
+
+            std::string newpath = p ["path"].toStdString ();
+            newpath.append("/%%%%");
+            boost::filesystem::path bpath =
+                boost::filesystem::unique_path (newpath);
+            p.set ("path", bpath.native());
+            currentBackend = make_Backend (p, scheduler, journal);
+            bpath = boost::filesystem::unique_path (newpath);
+            p.set("path", bpath.native());
+            previousBackend = make_Backend (p, scheduler, journal);
+
+            if (fastBackendParameters.size () > 0)
+            {
+                Parameters fp = fastBackendParameters;
+
+                std::string newfpath = fp ["path"].toStdString ();
+                newfpath.append("/%%%%");
+                boost::filesystem::path bfpath =
+                    boost::filesystem::unique_path (newfpath);
+                fp.set ("path", bfpath.native());
+                currentFastBackend = make_Backend (fp, scheduler, journal);
+            }
+            else
+            {
+                currentFastBackend = nullptr;
+            }
+        }
 
         return std::make_unique <DatabaseImp> (name, scheduler, readThreads,
-            std::move (backend), std::move (fastBackend), journal);
+            std::move (backend), std::move (fastBackend), currentBackend,
+            previousBackend, currentFastBackend, journal);
     }
 };
 

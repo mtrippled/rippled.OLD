@@ -37,6 +37,7 @@ struct ConfigSection
 
 // VFALCO TODO Rename and replace these macros with variables.
 #define SECTION_ACCOUNT_PROBE_MAX       "account_probe_max"
+#define SECTION_ASYNC_DB                "async_db"
 #define SECTION_CLUSTER_NODES           "cluster_nodes"
 #define SECTION_DATABASE_PATH           "database_path"
 #define SECTION_DEBUG_LOGFILE           "debug_logfile"
@@ -68,6 +69,7 @@ struct ConfigSection
 #define SECTION_PEER_SCAN_INTERVAL_MIN  "peer_scan_interval_min"
 #define SECTION_PEER_SSL_CIPHER_LIST    "peer_ssl_cipher_list"
 #define SECTION_PEER_START_MAX          "peer_start_max"
+#define SECTION_ROTATE_DELETE           "rotate_delete"
 #define SECTION_RPC_ALLOW_REMOTE        "rpc_allow_remote"
 #define SECTION_RPC_ADMIN_ALLOW         "rpc_admin_allow"
 #define SECTION_RPC_ADMIN_USER          "rpc_admin_user"

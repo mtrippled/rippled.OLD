@@ -163,6 +163,26 @@ public:
             }
         }
 
+        if (getConfig ().ASYNC_DB == true)
+        {
+            options.disableDataSync = true;
+            options.db_stats_log_interval = -1;
+            options.max_log_file_size = 0;
+        }
+
+        if (getConfig ().ROTATE_DELETE > 0)
+        {
+            options.disable_auto_compactions = true;
+            options.compaction_options_fifo.max_table_files_size =
+                std::numeric_limits<std::uint64_t>::max();
+            options.max_open_files = std::numeric_limits<int>::max();
+            options.target_file_size_base =
+                std::numeric_limits<int>::max();
+            options.env->SetBackgroundThreads(1, rocksdb::Env::LOW);
+            options.env->SetBackgroundThreads(1, rocksdb::Env::HIGH);
+            options.max_background_flushes = 1;
+        }
+
         rocksdb::DB* db = nullptr;
         rocksdb::Status status = rocksdb::DB::Open (options, m_name, &db);
         if (!status.ok () || !db)
@@ -257,8 +277,12 @@ public:
                     encoded.getData ()), encoded.getSize ()));
         }
 
-        rocksdb::WriteOptions const options;
+        rocksdb::WriteOptions options;
 
+        if (getConfig ().ASYNC_DB == true)
+        {
+            options.disableWAL = true;
+        }
         m_db->Write (options, &wb).ok ();
     }
 
